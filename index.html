@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>HSK Karaoke - Scanner & Editor Completo</title>
+    <style>
+        /* ESTILOS OPTIMIZADOS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #f0f4f8; padding: 20px 16px 32px; color: #1e293b; }
+        .app-container { max-width: 700px; margin: 0 auto; background: white; border-radius: 36px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 20px 20px 30px; }
+        h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #c2410c, #7c2d12); background-clip: text; -webkit-background-clip: text; color: transparent; text-align: center; margin-bottom: 10px; }
+        .sub { color: #5b6e8c; font-size: 0.8rem; margin-bottom: 24px; border-left: 3px solid #f97316; padding-left: 12px; }
+        
+        .select-group { background: #f8fafc; border-radius: 24px; padding: 16px; margin-bottom: 20px; }
+        
+        /* AJUSTES PARA LA APARIENCIA DE LA IMAGEN */
+        .selector-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .selector-row label { font-weight: 600; width: 80px; font-size: 1rem; color: #334155; display: flex; align-items: center; gap: 8px; }
+        
+        select { background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 1rem; cursor: pointer; color: #1e293b; }
+        
+        /* BOTONES ESPECÍFICOS */
+        .btn-scan { background: #2563eb; color: white; width: 100%; padding: 15px; border-radius: 8px; font-weight: 700; font-size: 1.1rem; border: none; margin-bottom: 15px; cursor: pointer; }
+        
+        .btn-load { background: #f97316; color: white; flex: 1; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; }
+        
+        .btn-trans { background: #fff7ed; color: #f97316; border: 1px solid #ffedd5; flex: 1; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-trans.active { background: #ffedd5; border-color: #f97316; }
+
+        /* NUEVA FILA DE EDICIÓN Y SINCRONIZACIÓN */
+        .editor-sync-row { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-editor { background: #a855f7; color: white; flex: 2; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; }
+        .btn-sync-fix { background: #ef4444; color: white; flex: 1; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 0.85rem; }
+
+        /* ESTADO ABAJO */
+        .status-bar { background: #f1f5f9; border-radius: 8px; padding: 12px; margin-top: 20px; border-left: 4px solid #1e293b; font-size: 0.9rem; color: #475569; }
+
+        button:active { opacity: 0.8; transform: scale(0.98); }
+
+        .player-card { margin: 16px 0; padding: 16px 12px; }
+        .audio-info { background: #f1f5f9; border-radius: 60px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.8rem; text-align: center; word-break: break-all; }
+        .transcript-area { background: #fefce8; border-radius: 24px; padding: 20px 16px; min-height: 280px; border: 2px solid #fde68a; }
+        .karaoke-word { display: inline-block; border-radius: 10px; padding: 2px 3px; margin: 0 1px; font-size: 1.2rem; cursor: pointer; transition: background 0.1s; }
+        .karaoke-word.active { background-color: #fbbf24; font-weight: 600; }
+        
+        textarea { width: 100%; padding: 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-family: monospace; font-size: 0.9rem; margin-top: 8px; }
+        footer { font-size: 0.7rem; text-align: center; margin-top: 24px; color: #94a3b8; }
+        .dialogue-line { display: block; margin-bottom: 6px; line-height: 1.6; }
+        .speaker-label { font-weight: 800; color: #1e293b; margin-right: 6px; display: inline-block; font-size: 1.2rem; }
+        .translation-container { margin-top: 30px; padding-top: 25px; border-top: 2px dashed #e2e8f0; display: flex; flex-direction: column; gap: 12px; }
+        .translation-line { font-style: normal; color: #334155; font-size: 1.1rem; line-height: 1.5; white-space: pre-line; }
+        
+        /* Estilos del modal tipo carpeta (primera imagen) */
+        .modal-folder-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .modal-folder-container {
+            background: white;
+            width: 90%;
+            max-width: 520px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            overflow: hidden;
+            animation: fadeSlide 0.2s ease;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .modal-folder-header {
+            padding: 18px 20px 8px 20px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9fafb;
+        }
+        .modal-folder-body {
+            padding: 20px;
+        }
+        .url-input-group {
+            margin-bottom: 24px;
+        }
+        .url-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .url-input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+        .url-input-group input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.2);
+        }
+        .folder-preview-area {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 12px 0 8px;
+            font-size: 0.8rem;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-folder-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 28px;
+        }
+        .btn-modal-subir {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-modal-cancel {
+            background: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        /* Confirmación estilo tercera imagen */
+        .confirm-upload-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirm-card {
+            background: white;
+            width: 300px;
+            border-radius: 24px;
+            padding: 24px 20px 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+        }
+        .confirm-card p {
+            font-size: 1rem;
+            margin-bottom: 24px;
+            line-height: 1.4;
+            color: #1e293b;
+        }
+        .confirm-card-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .confirm-yes {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .confirm-no {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <h1>🎧 HSK Karaoke</h1>
+    <div class="sub">✨ Las ediciones se guardan permanentemente en este navegador y los audios se encuentran en el repositorio:
+"https://josemmblanes.github.io/Audios/".</div>
+
+    <div class="select-group">
+        <div class="selector-row">
+            <label><img src="https://cdn-icons-png.flaticon.com/512/2991/2991165.png" width="16"> Nivel</label>
+            <select id="levelSelect" style="width: 40%;"><option value="">Primero escanea...</option></select>
+            <label style="width: auto; font-weight: normal; cursor: pointer;"><input type="checkbox" id="playAllLevelCheck" style="margin-right: 4px;"> Todo el nivel</label>
+            <button id="playLoopLevelBtn" style="display: none; background: #10b981; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Reproducir nivel en bucle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><path d="M21 12a9 9 0 1 1-9-9m0 0v6m0-6h6"/><polyline points="17 17 21 21 17 17"/></svg></button>
+            <button id="playRandomLevelBtn" style="display: none; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Reproducir nivel de forma aleatoria"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg></button>
+        </div>
+        <div class="selector-row">
+            <label>📖 Lección</label>
+            <select id="lessonSelect" style="width: 40%;"><option value="">--</option></select>
+            <label style="width: auto; font-weight: normal; cursor: pointer;"><input type="checkbox" id="playAllLessonCheck" style="margin-right: 4px;"> Toda la lección</label>
+            <button id="playLoopLessonBtn" style="display: none; background: #10b981; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Reproducir lección en bucle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><path d="M21 12a9 9 0 1 1-9-9m0 0v6m0-6h6"/><polyline points="17 17 21 21 17 17"/></svg></button>
+            <button id="playRandomLessonBtn" style="display: none; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" title="Reproducir lección de forma aleatoria"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg></button>
+        </div>
+        <div class="selector-row">
+            <label>🎙️ Audio</label>
+            <select id="audioSelect" style="flex: 1;"><option value="">--</option></select>
+            <button id="loadAudioBtn" class="btn-load" style="flex: 0.6; padding: 10px; font-size: 0.9rem;">▶️ Cargar</button>
+        </div>
+        
+        <div class="selector-row">
+            <button id="toggleTranslationBtn" class="btn-trans" style="width: 100%;">📖 Mostrar traducción</button>
+        </div>
+
+        <div class="editor-sync-row">
+            <button id="showEditorBtn" class="btn-editor">📝 Edición avanzada</button>
+            <button id="syncFixBtn" class="btn-sync-fix">⚡ Sincronizar</button>
+        </div>
+    </div>
+
+    <div class="status-bar" id="audioInfo">📌 Estado: Cargando audios...</div>
+
+    <div class="player-card">
+        <audio id="audioPlayer" controls style="width:100%; border-radius: 40px; margin-bottom: 15px;"></audio>
+        <div class="transcript-area" id="transcriptContainer"></div>
+    </div>
+    
+    <footer>💾 Sus ediciones sobreescriben los datos originales de forma permanente.</footer>
+</div>
+
+<script>
+const HSK_DATA = {
+// NIVEL 1
+"1_2_1": { "zh": "女: 你好\n男: 你好", "es": "Mujer: Hola\nHombre: Hola" },
+"1_2_2": { "zh": "女: 您好\n男: 你们 好", "es": "Mujer: Hola (formal)\nHombre: Hola a vosotros" },
+"1_2_3": { "zh": "男: 再见\n女: 再见", "es": "Hombre: Adiós\nMujer: Adiós" },
+"1_2_4": { "zh": "女: 谢谢 你\n男: 不客气", "es": "Mujer: Gracias\nHombre: De nada" },
+"1_2_5": { "zh": "男: 对不起\n女: 没关系", "es": "Hombre: Lo siento\nNo pasa nada" },
+"1_3_1": { "zh": "女: 你 叫什么 名字?\n男: 我 叫 李月。", "es": "Mujer: ¿Cómo te llamas?\nHombre: Me llamo Li Yue." },
+"1_3_2": { "zh": "男: 你 是 老师 吗?\n女: 我 不是 老师, 我 是 学生。", "es": "Hombre: ¿Eres profesor?\nMujer: No soy profesora, soy estudiante." },
+"1_3_3": { "zh": "女: 你 是 中国人 吗?\n男: 我 不是 中国人, 我 是 美国人。", "es": "Mujer: ¿Eres chino?\nHombre: No soy chino, soy estadounidense." },
+"1_3_4": { "zh": "男: 你 是 哪 国 人?\n女: 我 是 美国人, 你 呢?\n男: 我 是 中国人。", "es": "Hombre: ¿De qué país eres?\nMujer: Soy estadounidense, ¿y tú?\nHombre: Soy chino." },
+"1_4_1": { "zh": "女: 你好。\n男: 你好。\n女: 你好 吗?\n男: 我 很好, 你 呢?\n女: 我 也 很好, 谢谢!", "es": "Mujer: Hola.\nHombre: Hola.\nMujer: ¿Qué tal estás?\nHombre: Estoy muy bien, ¿y tú?\nMujer: Yo también estoy muy bien, ¡gracias!" },
+"1_4_2": { "zh": "女: 你好。\n男: 你好! 很 高兴 认识 你。\n女: 我 也 很 高兴。", "es": "Mujer: Hola.\nHombre: ¡Hola! Encantado de conocerte.\nMujer: El placer es mío." },
+"1_4_3": { "zh": "女: 她 是 谁?\n男: 她 是 我的 汉语 老师, 她 叫 李月。", "es": "Mujer: ¿Quién es ella?\nHombre: Es mi profesora de chino, se llama Li Yue." },
+"1_4_4": { "zh": "女: 他 是 谁?\n男: 他 是 我 同学。\n女: 她 呢? 她 是 你 同学 吗?\n男: 她 不是 我 同学, 她 是 我 朋友。", "es": "Mujer: ¿Quién es él?\nHombre: Es mi compañero de estudios.\nMujer: ¿Y ella? ¿Es tu compañera de estudios?\nHombre: No es mi compañera de estudios, es mi amiga." },
+"1_4_5": { "zh": "女: 这 es 你 爸爸、妈妈 吗?\n男: 对, 这 是 我 爸爸, 这 是 我 妈妈。\n女: 你 爸爸 在 哪儿 工作?\n男: 他 在 医院 工作. 他 是 医生。\n女: 你 妈妈 呢?\n男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?\nHombre: Sí, este es mi padre, esta es mi madre.\nMujer: ¿Dónde trabaja tu padre?\nHombre: Él trabaja en el hospital. Es médico.\nMujer: ¿Y tu madre?\nHombre: Ella no trabaja." },
+"1_5_1": { "zh": "女: 这 es 谁?\n男: 这 es 我 爸爸。\n女: 那 是 谁?\n男: 那 是 我 妈妈。", "es": "Mujer: ¿Quién es este?\nHombre: Este es mi padre.\nMujer: ¿Quién es aquella?\nHombre: Aquella es mi madre." },
+"1_5_3": { "zh": "女: 小猫 在 哪儿?\n男: 小猫 在 那儿。\n女: 小狗 在 哪儿?\n男: 小狗 在 椅子 下面。", "es": "Mujer: ¿Dónde está el gatito?\nHombre: El gatito está allí.\nMujer: ¿Dónde está el perrito?\nHombre: El perrito está debajo de la silla." },
+"1_5_4": { "zh": "女: 你 在 哪儿 工作?\n男: 我 在 学校 工作。\n女: 你 儿子 在 哪儿 工作?\n男: 我 儿子 在 医院 工作, 他 是 医生。", "es": "Mujer: ¿Dónde trabajas?\nHombre: Trabajo en la escuela.\nMujer: ¿Dónde trabaja tu hijo?\nHombre: Mi hijo trabaja en el hospital, es médico." },
+"1_5_5": { "zh": "女: 这儿 有 人 吗?\n男: 没有。\n女: 我 能 坐 这儿 吗?\n男: 请坐。", "es": "Mujer: ¿Aquí hay alguien?\nHombre: No hay.\nMujer: ¿Me puedo sentar aquí?\nHombre: Por favor, siéntate." },
+"1_6_1": { "zh": "女: 你 想 喝 什么?\n男: 我 想 喝 茶。\n女: 你 想 吃 什么?\n男: 我 想 吃 米饭。", "es": "Mujer: ¿Qué quieres beber?\nHombre: Quiero beber té.\nMujer: ¿Qué quieres comer?\nHombre: Quiero comer arroz." },
+"1_6_2": { "zh": "男: 下午 你 想 做 什么?\n女: 下午 我 想 去 商店。\n男: 你 想 买 什么?\n女: 我 想 买 一个 杯子。", "es": "Hombre: ¿Qué quieres hacer por la tarde?\nMujer: Por la tarde quiero ir a la tienda.\nHombre: ¿Qué quieres comprar?\nMujer: Quiero comprar un vaso." },
+"1_6_3": { "zh": "女: 你好! 这个 杯子 多少 钱?\n男: 二十八 块。\n女: 那个 杯子 多少 钱?\n男: 那个 杯子 十八 块钱。", "es": "Mujer: ¡Hola! ¿Cuánto cuesta este vaso?\nHombre: Veintiocho yuanes.\nMujer: ¿Cuánto cuesta aquel vaso?\nHombre: Aquel vaso cuesta dieciocho yuanes." },
+"1_7_1": { "zh": "女: 请问, 今天 几号?\n男: 今天 9月1号。\n女: 今天 星期几?\n男: 星期三。", "es": "Mujer: Disculpe, ¿qué día del mes es hoy?\nHombre: Hoy es 1 de septiembre.\nMujer: ¿Qué día de la semana es hoy?\nHombre: Miércoles." },
+"1_7_2": { "zh": "男: 昨天 是 几月几号?\n女: 昨天 是 8月31号, 星期二。\n男: 明天 呢?\n女: 明天 是 9月2号, 星期四。", "es": "Hombre: ¿Qué fecha fue ayer?\nMujer: Ayer fue 31 de agosto, martes.\nHombre: ¿Y mañana?\nMujer: Mañana es 2 de septiembre, jueves." },
+"1_7_3": { "zh": "女: 现在 几点?\n男: 现在 十点十分。\n女: 中午 几点 吃饭?\n男: 十二点 吃饭。", "es": "Mujer: ¿Qué hora es?\nHombre: Son las diez y diez.\nMujer: ¿A qué hora comemos al mediodía?\nHombre: Comemos a las doce." },
+"1_7_4": { "zh": "女: 小张, 你 家 有 几个 人?\n男: 我 家 有 六个 人。", "es": "Mujer: Xiao Zhang, ¿cuántas personas hay en tu familia?\nHombre: En mi familia hay seis personas." },
+"1_7_5": { "zh": "A: 你 女儿 几岁?\nB: 她 1今年 四岁了。", "es": "A: ¿Cuántos años tiene tu hija?\nB: Ella tiene cuatro años este año." },
+"1_8_1": { "zh": "女: 你 会 说 汉语 吗?\n男: 我 会 说 汉语。\n女: 你 妈妈 会 说 汉语 吗?\n男: 她 不会 说。", "es": "Mujer: ¿Sabes hablar chino?\nHombre: Sé hablar chino.\nMujer: ¿Tu madre sabe hablar chino?\nHombre: No sabe." },
+"1_8_2": { "zh": "男: 中国菜 好吃 吗?\n女: 中国菜 很 好吃。\n男: 你 会 做 中国菜 吗?\n女: 我 不会 做。", "es": "Hombre: ¿Está buena la comida china?\nMujer: La comida china está muy buena.\nHombre: ¿Sabes hacer comida china?\nMujer: No sé hacerla." },
+"1_8_3": { "zh": "女: 你 会 写 汉字 吗?\n男: 我 会 写。\n女: 这个 字 怎么 写?\n男: 对不起, 这个 字 我 会 读, 不会 写。", "es": "Mujer: ¿Sabes escribir caracteres chinos?\nHombre: Sé escribirlos.\nMujer: ¿Cómo se escribe este carácter?\nHombre: Lo siento, sé leer este carácter, pero no escribirlo." },
+"1_8_4": { "zh": "男: 明天 星期六, 你 去 学校 吗?\n女: 我 去 学校。\n男: 你 去 学校 做 什么?\n女: 我 去 学校 看书。", "es": "Hombre: Mañana es sábado, ¿vas a la escuela?\nMujer: Voy a la escuela.\nHombre: ¿Qué vas a hacer a la escuela?\nMujer: Voy a la escuela a leer libros." },
+"1_9_1": { "zh": "女: 桌子 上 有  什么?\n男: 桌子 上 有 一个 电脑 和 一本书。", "es": "Mujer: ¿Qué hay encima de la mesa?\nHombre: Encima de la mesa hay un ordenador y un libro." },
+"1_9_2": { "zh": "女: 爸爸 什么时候 回家?\n男: 下午 5点。\n女: 我们 什么时候 去 看电影?\n男: 6点30分。", "es": "Mujer: ¿Cuándo vuelve papá a casa?\nHombre: A las 5 de la tarde.\nMujer: ¿Cuándo vamos a ir a ver la película?\nHombre: El lunes voy a Pekín.\n" },
+"1_9_3": { "zh": "男: 我 星期一 去 北京。\n女: 你 想 在 北京 住 几天?\n男: 住 三天。\n女: 星期五 前 能 回家 吗?\n男: 能。", "es": "Hombre: El lunes voy a Pekín.\nMujer: ¿Cuántos días quieres estar en Pekín?\nHombre: Me quedo tres días.\nMujer: ¿Puedes volver a casa antes del viernes?\nHombre: Sí, puedo." },
+"1_10_1": { "zh": "女: 昨天 上午 你 去 哪儿了?\n男: 我 去 商店 买东西 了。\n女: 你 买 什么 了?\n男: 我 买 一点儿 苹果。", "es": "Mujer: ¿A dónde fuiste ayer por la mañana?\nHombre: Fui a la tienda a comprar cosas.\nMujer: ¿Qué compraste?\nHombre: Compré un poco de manzanas." },
+"1_10_2": { "zh": "女: 你 看见 张先生 了 吗?\n男: 看见 了, 他 去 学开车 了。\n女: 他 什么时候 能 回来?\n男: 四十分钟 后 回来。", "es": "Mujer: ¿Viste al señor Zhang?\nHombre: Lo vi. Fue a aprender a conducir.\nMujer: ¿Cuándo puede volver?\nHombre: Vuelve en cuarenta minutos." },
+"1_10_3": { "zh": "女: 喂, 你 回家 了?\n男: 喂, 我 在 出租车 上. 我 去 学校。", "es": "Mujer: Hola, ¿has vuelto a casa?\nHombre: Hola, estoy en el taxi. Voy a la escuela." },
+"1_10_4": { "zh": "女: 昨天 北京 的 天气 怎么样?\n男: 太热了。\n女: 明天 呢? 明天 天气 怎么样?\n男: 明天 天气 很 好, 不冷 不热。", "es": "Mujer: ¿Qué tiempo hizo ayer en Pekín?\nHombre: Demasiado calor.\nMujer: ¿Y mañana? ¿Qué tiempo hará mañana?\nHombre: Mañana hará muy buen tiempo. Ni frío ni calor." },
+"1_10_5": { "zh": "女: 我们 中午 去 买. 好 吗?\n男: 你 看. 我 没(有) 钱 了!", "es": "Mujer: Vamos a comprar al mediodía. ¿Vale?\nHombre: ¡Mira! ¡Ya no tengo dinero!" },
+"1_10_6": { "zh": "男: 下雨 了!\n女: 我 看见 了。", "es": "Hombre: ¡Está lloviendo!\nMujer: Ya lo he visto." },
+"1_10_7": { "zh": "男: 你 在 那儿 做 什么 呢?\n女: 我 在 看书 呢。", "es": "Hombre: ¿Qué estás haciendo allí?\nMujer: Estoy leyendo." },
+
+// NIVEL 2
+"2_1_1": { "zh": "男: 我 要 去 北京 旅游, 你 觉得 什么时候 去 最好?\n女: 九月 去 北京 旅游 最好。\n男: 为什么?\n女: 九月 的 北京 天气 不冷 也 不热。", "es": "Hombre: Voy a ir de viaje a Pekín, ¿cuándo crees que es mejor ir?\nMujer: Ir a Pekín en septiembre es lo mejor.\nHombre: ¿Por qué?\nMujer: En septiembre, el clima de Pekín no es frío ni caluroso." },
+"2_1_2": { "zh": "女: 你 喜欢 什么 运动?\n男: 我 最喜欢 踢足球。\n女: 下午 我们 一起 去 踢足球 吧。\n男: 好 啊!", "es": "Mujer: ¿Qué deporte te gusta?\nHombre: El que más me gusta es jugar al fútbol.\nMujer: Vamos a jugar al fútbol juntos esta tarde.\nHombre: ¡Vale!" },
+"2_1_3": { "zh": "男: 桌子 下面 有 个 猫。\n女: 那 是 系统的 猫, 它 叫 花花。\n男: 它 很 漂亮。\n女: 是a, 我 觉得 系统的 猫 最 漂亮。\n男: 它 多大 了?\n女: 六个 多月。", "es": "Hombre: Hay un gato debajo de la mesa.\nMujer: Ese es mi gato, se llama Huahua.\nHombre: Es muy bonito.\nMujer: Sí, creo que sus ojos son lo más bonito.\nHombre: ¿Cuántos años tiene?\nMujer: Más de seis meses." },
+"2_1_4": { "zh": "女: 你 很少 生病, 是是不是 喜欢 运动?\n男: 是啊, 我 每天早上 都 要 出去 跑步。\n女: 你 每天 几点 起床?\n男: 我 每天 六点 起床。", "es": "Mujer: Rara vez te enfermas, ¿es porque te gusta hacer deporte?\nHombre: Sí, salgo a correr todas las mañanas.\nMujer: ¿A qué hora te levantas cada día?\nHombre: Me levanto a las seis todos los días." },
+"2_2_1": { "zh": "女: 这块 手表 是 个人 的 吗?\n男: 不是 系统的. 是 我 爸爸 的。\n女: 多少 钱 买的?\n男: 三千 多块。", "es": "Mujer: ¿Es tuyo este reloj?\nHombre: No es mío. Es de mi padre.\nMujer: ¿Cuánto costó?\nHombre: Más de tres mil yuanes." },
+"2_2_2": { "zh": "男: 你 看见 我的 杯子 了 吗?\n女: 这里 有 几个 杯子, 哪个 是 系统的?\n男: 左边 那个 红色 的 是 系统的。\n女: 给你。", "es": "Hombre: ¿Has visto mi vaso?\nMujer: Aquí hay varios vasos, ¿cuál es el tuyo?\nHombre: El rojo de la izquierda es el mío.\nMujer: Aquí tienes." },
+"2_2_3": { "zh": "女: 你 喜欢 踢足球 吗?\n男: 非常 喜欢。\n女: 你 是什么 时候 开始 踢足球 的?\n男: 我 十一岁 的 时候 开始 踢足球, 已经 踢了 十年 了。", "es": "Mujer: ¿Te gusta jugar al fútbol?\nHombre: Me gusta muchísimo.\nMujer: ¿Cuándo empezaste a jugar al fútbol?\nHombre: Empecé a jugar cuando tenía once años, ya llevo diez años jugando." },
+"2_2_4": { "zh": "男: 今天 去不去 打球?\n女: 这两天 有点儿 累, 不去 打球 了。\n男: 你 在 做什么 呢? 是 在 想 昨天 的 考试 吗?\n女: 是啊, 我 觉得 听 和 说 还可以, 读 和 写 不好, 很多 字 我 都 不知道 是什么 意思。", "es": "Hombre: ¿Para ir a jugar hoy?\nMujer: Estos dos días he estado un poco cansada, ya no voy a ir.\nHombre: ¿Qué estás haciendo? ¿Estás pensando en el examen de ayer?\nMujer: Sí, creo que escuchar y hablar están bien, pero leer y escribir no se me dan bien; muchos caracteres no sé qué significan." },
+"2_3_1": { "zh": "女: 你 知道 小王 今天 什么时候 来 学校 吗?\n男: 他 已经 来了。\n女: 你 怎么 知道 他 来了?\n男: 我 在 门外 看见 他的 自行车 了。", "es": "Mujer: ¿Sabes a qué hora viene Xiao Wang hoy a la escuela?\nHombre: Ya ha llegado.\nMujer: ¿Cómo sabes que ha llegado?\nHombre: He visto su bicicleta fuera de la puerta." },
+"2_3_2": { "zh": "男: 今天 的 羊肉 很 好吃, 你 怎么 不 吃了?\n女: 这个 星期 天天 都 吃 羊肉, 不想 吃了。\n男: 那 你 还想 吃  什么?\n女: 来 一点儿 面条 吧。", "es": "Hombre: El cordero de hoy está muy rico, ¿por qué no comes más?\nMujer: He comido cordero todos los días de esta semana, ya no quiero más.\nHombre: Entonces, ¿qué más quieres comer?\nMujer: Tráeme un poco de fideos." },
+"2_3_3": { "zh": "男: 昨天 你们 怎么 都 没去 打篮球?\n女: Porque 昨天 下雨, 所以 我们 都 没去. 我 去 游泳 了。\n男: 你 经常 游泳 吗?\n女: 这个 月 我 天天 游泳, 我 现在  公斤 了。", "es": "Hombre: ¿Por qué no fueron ayer a jugar al baloncesto?\nMujer: Porque ayer llovió, por eso no fuimos. Yo fui a nadar.\nHombre: ¿Nadas a menudo?\nMujer: Este mes he nadado todos los días, ahora peso setenta kilos." },
+"2_3_4": { "zh": "女: 你 现在 在 哪儿 呢?\n男: 在 去 机场 的 路上. 你 已经 到了 吗?\n女: 我 下飞机 了. 你 还有 多长 时间 能 到 这儿?\n男: 二十 分钟 就 到。", "es": "Mujer: ¿Dónde estás ahora?\nHombre: En camino al aeropuerto. ¿Ya has llegado?\nMujer: Ya bajé del avión. ¿Cuánto tiempo te falta para llegar aquí?\nHombre: Llego en veinte minutos." },
+"2_4_1": { "zh": "男: 晚上 我们 去 饭馆 吃饭, 怎么样?\n女: 我 不想 去 外面 吃, 我 想 在 家 吃。\n男: 那 你 准备 做 什么 呢?\n女: 就 做 你 爱吃 的 鱼 吧。", "es": "Hombre: ¿Qué tal si vamos a cenar a un restaurante esta noche?\nMujer: No quiero salir a comer fuera, quiero comer en casa.\nHombre: Entonces, ¿qué vas a preparar?\nMujer: Haré el pescado que tanto te gusta." },
+"2_4_2": { "zh": "女: 帮 我 看一下 这件 衣服 怎么样。\n男: 颜色 还可以, 就是 有点儿 大。\n女: 这件 小 的 怎么样?\n男: 这件 不错, 就  买 这件 吧。", "es": "Mujer: Ayúdame a ver qué tal me queda esta ropa.\nHombre: El color está bien, pero es un poco grande.\nMujer: ¿Qué tal esta pequeña?\nHombre: Esta no está mal, compra esta." },
+"2_4_3": { "zh": "女: 休息 一下吧, 喝 咖啡 吗?\n男: 不 喝了, 我 已经 喝 两杯 了。\n女: 是啊, 咖啡 喝多了 对 身体 不好。\n男: 以后 我 少喝 一点儿, 每天 喝 一杯。", "es": "Mujer: Descansemos un poco, ¿quieres café?\nHombre: No, ya me he tomado dos tazas.\nMujer: Es cierto, beber demasiado café no es bueno para la salud.\nHombre: En el futuro beberé menos, una taza al día." },
+"2_4_4": { "zh": "男: 不要 看  电视 了, 明天 上午 还有 汉语 课 呢。\n女: 看 电视 对 学 汉语 有 帮助。\n男: 明天 的 课 你 都 准备好 了 吗?\n女: 都 准备好 了。", "es": "Hombre: Deja de ver la televisión, mañana por la mañana tienes clase de chino.\nMujer: Ver la televisión ayuda a aprender chino.\nHombre: ¿Has preparado ya toda la clase de mañana?\nMujer: Ya está todo preparado." },
+"2_5_1": { "zh": "男: 昨天 和 你 一起 唱歌 的 人 是 谁?\n女: 一个 朋友。\n男:  朋友? 是不是 男朋友?\n女: 不是 不是, 我 同学 介绍 的, 昨天 第一次 见。", "es": "Hombre: ¿Quién era la persona que estaba cantando contigo ayer?\nMujer: Un amigo.\nHombre: ¿Qué amigo? ¿Es tu novio?\nMujer: No, no, me lo presentó un compañero de clase, ayer lo vi por primera vez." },
+"2_5_2": { "zh": "男: 左边 这个 看 报纸 的 女孩子 是 你 姐姐 吗?\n女: 是, 右边 写字 的 那个人 是 我 哥哥。\n男: 你 哥哥 多大?\n女: 25岁, 他 比 我 大 三岁。", "es": "Hombre: ¿La chica de la izquierda que lee el periódico es tu hermana mayor?\nMujer: Sí, y la persona de la derecha que está escribiendo es mi hermano mayor.\nHombre: ¿Qué edad tiene tu hermano?\nMujer: 25 años, es tres años mayor que yo." },
+"2_5_3": { "zh": "男: 今天 的 西瓜  卖?\n女: 三块五 一斤。\n男: 比 昨天 便宜。\n女: 是, 苹果 也 比 昨天 便宜 一些, 您 来点儿 吧。", "es": "Hombre: ¿A cómo se vende la sandía hoy?\nMujer: A 3,5 yuanes el medio kilo.\nHombre: Más barato que ayer.\nMujer: Sí, las manzanas también están un poco más baratas que ayer, llévese algunas." },
+"2_5_4": { "zh": "女: 你 每天早上 几点 起床?\n男: 六点 多。\n女: 你 比 我 早起 一个 小时。\n男: 我 睡得 也 早, 我 每天晚上 10点 就 睡觉。", "es": "Mujer: ¿A qué hora te levantas cada mañana?\nHombre: Pasadas las seis.\nMujer: Te levantas una hora antes que yo.\nHombre: También me acuesto temprano, me duermo a las 10 todas las noches." },
+"2_5_5": { "zh": "女: 再来点儿 米饭 吧, 你 吃得太少 了。\n男: 不少 了, 今天 吃得 很好, 太 谢谢 你了。\n女: 你 做饭 做得 怎么样?\n男: 不怎么样, 我 妻子 比 我 做得 好。", "es": "Mujer: Toma un poco más de arroz, has comido muy poco.\nHombre: No es poco, hoy he comido muy bien, muchas gracias.\nMujer: ¿Qué tal cocinas?\nHombre: No muy bien, mi esposa cocina mejor que yo." },
+"2_5_6": { "zh": "男: 说话 的 那个人 就是 我的 汉语 老师. 你 可能 不认识 他。\n女: 是 新来 的 汉语 老师 吗?\n男: 是 去年 来 的, 他 姓 王, 28岁。\n女: 他 比 我们 老师 小  岁。", "es": "Hombre: La persona que habla es mi profesor de chino. Puede que no le conozcas.\nMujer: ¿Es el nuevo profesor de chino?\nHombre: Llegó el año pasado, se apellida Wang y tiene 28 años.\nMujer: Es dos años menor que nuestro profesor." },
+"2_5_7": { "zh": "男: 你 怎么 买了 这么 多 东西 啊?\n女: 哥哥 今天 中午 回来 吃饭。\n男: 我 看看 买  什么 了. 羊肉, 鸡蛋, 面条, 西瓜... 真 不少! 妈妈 呢?\n女: 正在 准备 午饭 呢。", "es": "Hombre: ¿Por qué has comprado tantas cosas?\nMujer: Mi hermano mayor viene a comer hoy al medieldía.\nHombre: A ver qué has comprado... Cordero, huevos, fideos, sandía... ¡cuántas cosas! ¿Y mamá?\nMujer: Está preparando el almuerzo ahora mismo." },
+"2_6_1": { "zh": "男: 你 看过  那个 电影 没有?\n女: 没看过. 听说 很 有意思。\n男: 那 我们 下个 星期 一起 去 看 吧。\n女: 可以, 但是 我 女朋友 也 想 去。", "es": "Hombre: ¿Has visto esa película?\nMujer: No la he visto. He oído que es muy interesante.\nHombre: Pues vayamos a verla juntos la semana que viene.\nMujer: Vale, pero mi novia también quiere ir." },
+"2_6_2": { "zh": "女: 听说 你 去过 中国. 还 想 去 吗?\n男: 我 虽然 去过 好几次, 但是 还 想 再去 玩儿玩儿。\n女: 那 我们 一起 去 吧。\n男: 好 啊, 到时候 我 给 你 打电话。", "es": "Mujer: He oído que has estado en China. ¿Quieres volver?\nHombre: Aunque he ido varias veces, quiero volver para pasear y divertirme.\nMujer: Pues vayamos juntos.\nHombre: ¡Vale! Ya te llamaré cuando sea el momento." },
+"2_6_3": { "zh": "男: 明天 天气  怎么样?\n女: Aunque 是 晴天, 但是 很 冷。\n男: 那 还 能 去 跑步 吗?\n女: 可以。", "es": "Hombre: ¿Qué tiempo hará mañana?\nMujer: Aunque estará soleado, hará mucho frío.\nHombre: ¿Aun así se puede ir a correr?\nMujer: Sí." },
+"2_6_4": { "zh": "女: 这个 椅子  怎么样?\n男: 颜色 很好 但是 它 太高了。\n女: 没关系, 前面 还有 几个。\n男: 走, 我们 过去 看看。", "es": "Mujer: ¿Qué tal esta silla?\nHombre: El color es bueno, pero es demasiado alta.\nMujer: No importa, hay algunas más allí delante.\nHombre: Vamos a echar un vistazo." },
+"2_6_5": { "zh": "女: 你 家 离  学校 远 吗?\n男: 不太远。\n女: 你 每天 怎么 去 上学?\n男: 有时候 坐 公共汽车, 有時候 走路 去。", "es": "Hombre: ¿Está tu casa lejos de la escuela?\nHombre: No muy lejos.\nMujer: ¿Cómo vas a clase cada día?\nHombre: A veces en autobús, otras veces caminando." },
+"2_6_6": { "zh": "男: 您 从 几岁  开始 学习 跳舞?\n女: 七岁。\n男: 是吗? 我 女儿  also 七岁了. 我 希望 她 能 和 您 学 跳舞, 可以 吗?\n女: 没问题, 非常 欢迎。", "es": "Hombre: ¿A qué edad empezó a aprender a bailar?\nMujer: A los siete años.\nHombre: ¿Ah sí? Mi hija también tiene siete años. Espero que pueda aprender con usted, ¿sería posible?\nMujer: Sin problema, es muy bienvenida." },
+
+// NIVEL 3
+"3_1_1": { "zh": "女: 邻居 王叔叔 家里 有 两只 鸟, 它们的 嘴 是 红的。 叫声 也 特别 好听。\n男: 真想 看看。 你能 带我 去 看一下 吗?", "es": "Mujer: El vecino, el tío Wang, tiene dos pájaros en casa; sus picos son rojos.\nMujer: Su canto también es especialmente agradable de escuchar.\nHombre: Realmente quiero verlos. ¿Puedes llevarme a echar un vistazo?" },
+"3_1_2": { "zh": "男: 您好, 我们 几点 能 上 飞机?\n女: 不好意思, 还要 再等 一会儿。", "es": "Hombre: Hola, ¿a qué hora podemos subir al avión?\nMujer: Lo siento, todavía hay que esperar un poco más." },
+"3_1_3": { "zh": "女: 这个 蛋糕 看起来 很好好吃 但我 担心 吃了 会 长胖。\n男: 没关系, 你 尝一下, 少 eat 一点儿。", "es": "Mujer: Este pastel se ve muy rico, pero me preocupa que engorde si lo como.\nHombre: No importa, pruébalo un poco; come solo un poquito." },
+"3_1_4": { "zh": "男: 医生, 我 右边 最里面 的 牙疼。\n女: 别动, 我 给你 检查 一下。", "es": "Hombre: Doctora, me duele la muela del fondo del lado derecho.\nMujer: No te muevas, te voy a examinar." },
+"3_1_5": { "zh": "女: 慢点儿 走, 我的 脚 有点儿 不舒服。\n男: 下次 别穿 这么 高s de 这种 鞋了。", "es": "Mujer: Camina más despacio, me duelen un poco los pies.\nHombre: La próxima vez no uses zapatos tan altos." },
+"3_2_1": { "zh": "男: 阿姨, 我 多高 了?\n女: 一米七 了. 今年 个子 长了 不少  啊。", "es": "Hombre: Tía, ¿cuánto mido ya?\nMujer: Un metro septenta. Has crecido mucho de estatura este año." },
+"3_2_2": { "zh": "女: 我的 照相机 是是不是 出问题 了?\n男: 没事, 应该是 没电 了。", "es": "Mujer: ¿Le pasa algo a mi cámara de fotos?\nHombre: No pasa nada, debe ser que se quedó sin batería." },
+"3_2_3": { "zh": "女: 西瓜 和 鸡蛋 都 买了. 还需要  A什me?\n男: 买点儿 牛奶 吧. 现在 买 还送 杯子 呢。", "es": "Mujer: Ya compré la sandía y los huevos. ¿Qué más hace falta?\nHombre: Compremos algo de leche. Si la compras ahora, hasta te regalan una taza." },
+"3_2_4": { "zh": "男: 教室里 真 安静 呢\n女: 明天 就要 考试 了. 大家 都在 复习 呢。", "es": "Hombre: Qué silenciosa está la clase.\nMujer: Mañana es el examen. Todos están repasando." },
+"3_3_1": { "zh": "男: 明天 早上 公司 有 一个 很 重要的 会议. 我 一早 就要 过去. 你 送 儿子 去 学校 吧。", "es": "Hombre: Mañana por la mañana hay una reunión muy importante en la empresa. Tengo que irme muy temprano.\nHombre: Lleva tú al hijo a la escuela." },
+"3_3_2": { "zh": "男: 女儿 最 喜欢的 动物 是 大熊猫. 她 觉得 大熊猫 特别 可爱. 每次 我们 带she 去 动物园, 走的 时候 她 都要 去 和 大熊猫 说 再见。", "es": "Hombre: El animal favorito de mi hija es el panda gigante. Ella piensa que los pandas son especialmente lindos.\nHombre: Cada vez que la llevamos al zoológico, al momento de irnos siempre tiene que ir a despedirse del panda." },
+"3_3_5": { "zh": "女: 我 昨天 穿的 那件 绿色的 衬衫 呢?\n男: 我 给你 洗了。", "es": "Mujer: ¿Dónde está la camisa verde que me puse ayer?\nHombre: Te la lavé." },
+"3_3_6": { "zh": "男: 小姐, 我 来 帮 您 拿 行理箱 吧?\n女: 谢谢, 请 小心 一点儿. 里面 有 一些 盘子 和 碗。", "es": "Hombre: Señorita, ¿la ayudo a llevar la maleta?\nMujer: Gracias, por favor tenga cuidado. Dentro hay algunos platos y cuencos." },
+"3_3_7": { "zh": "女: 你 还 记得 这个 体育馆 吗?\n男: 当然了. 过去 我和 你哥 常来 这里 打 篮球。", "es": "Mujer: ¿Aún recuerdas este gimnasio?\nHombre: Por supuesto. En el pasado, tu hermano y yo veníamos a menudo aquí a jugar al baloncesto." },
+"3_4_1": { "zh": "女: 爸爸, 照片 上的 那个 人 是 你 吗?\n男: 是啊, 那时 我才 23岁, 还没 跟你 妈妈 结婚 呢。", "es": "Mujer: Papá, ¿la persona de la foto eres tú?\nHombre: Sí, en ese entonces solo tenía 23 años, aún no me había casado con tu madre." },
+"3_4_2": { "zh": "男: 今晚 吃得 有点儿 多, 等会儿 去 公园 走走 吧。\n女: 我 不去 了, 六点 半的 时候 有 我 喜欢的 电视 节目。", "es": "Hombre: Comí un poco de más esta noche, vayamos a caminar al parque en un rato.\nMujer: Yo no voy, a las seis y media pasan mi programa de televisión favorito." },
+"3_4_3": { "zh": "女: 你 给他 发 邮件 了 吗?\n男: 没有, 我 觉得 那样 说 不清楚. 还是 见面 说 吧。", "es": "Mujer: ¿Le enviaste el correo electrónico?\nHombre: No, creo que de esa manera no se explica bien. Mejor hablemos en persona." },
+"3_4_4": { "zh": "男: 我 到 机场 了. 飞机 还有 一 小时 起飞, 你 别 迟到 了。\n女: 不会的, 我 在 出租车 上, 还有 10分钟 就能 到。", "es": "Hombre: Ya llegué al aeropuerto. El avión despega en una hora, no llegues tarde.\nMujer: No lo haré, estoy en el taxi, llegará en 10 minutos." },
+"3_4_5": { "zh": "女: 晚饭 做好了, 准备  吃饭 了。\n男: 等一会儿, 比赛 还有 三分钟 就 结束了。\n女: 快点儿 吧, 一起 吃. 菜 冷了 就 不好吃 了。\n男: 你 先吃, 我 马上 就 看完了。", "es": "Mujer: La cena está lista, prepárate para comer.\nHombre: Espera un momento, al partido solo le faltan tres minutos para terminar.\nMujer: Date prisa, comamos juntos. Si la comida se enfría, no sabrá buena.\nHombre: Come tú primero, ya casi termino de verlo." },
+"3_4_6": { "zh": "男: 节日 快乐。\n女: 谢谢. 你 准备 怎么 过节?\n男: 我 要和 同事 去  马. 要不要 一起 去?\n女: 不了, 我 要和 丈夫 去 爬山。", "es": "Hombre: Feliz festival (o día festivo).\nMujer: Gracias. ¿Cómo piensas pasar el día festivo?\nHombre: Voy a ir a montar a caballo con mis colegas. ¿Quieres venir?\nMujer: No, voy a ir a la montaña con mi esposo." },
+"3_4_7": { "zh": "女: 喂? 我 到 你家 楼下 了, 但是 我 忘记 你 住 哪一层 了。\n男: 8层, 809. 上了 后, 左边 第一家 就是。\n女: 知道了, 电梯 来了. 马上 上来。\n男: 好, 我 给你 开门。", "es": "Mujer: ¿Hola? Estoy abajo de tu edificio, pero olvidé en qué piso vives.\nHombre: Piso 8, 809. Al subir, la primera puerta a la izquierda es.\nMujer: Entendido, ya llegó el ascensor. Subo enseguida.\nHombre: Bien, te abro la puerta." },
+"3_5_1": { "zh": "女: 这辆 车 你 没开 多久 吧? 怎么 就要 换 新 facilities 的 了?\n男: 有l孩子 后 觉得 车 有点儿 小。\n女: 那 你 想 换 什么样的?\n男: 还没 决定 head 呢. 最近 正在 看。", "es": "Mujer: No hace mucho que manejas este coche, ¿verdad? ¿Por qué ya quieres cambiarlo por uno nuevo?\nHombre: Después de tener al niño, siento que el coche es un poco pequeño.\nMujer: ¿Y por cuál tipo lo quieres cambiar?\nHombre: Aún no lo he decidido. He estado mirando últimamente." },
+"3_5_2": { "zh": "男: 您好. 我 想 借 这 两本 词典。\n女: 不好意思, 词典 不能 外借. 只能 在 这儿 看。\n男: 好的, 谢谢。\n女: 不客气。", "es": "Hombre: Hola. Quisiera pedir prestados estos dos diccionarios.\nMujer: Lo siento, los diccionarios no se prestan para llevar. Solo se pueden consultar aquí.\nHombre: De acuerdo, gracias.\nMujer: De nada." },
+"3_5_3": { "zh": "女: 外面 雨 很大 吗?\n男: 不太太. 主要是 风大. 几乎 不能 打伞。\n女: 那 你 快去 洗个 热水澡 吧. 别 感冒 了。\n男: 好。", "es": "Mujer: ¿Está lloviendo mucho afuera?\nHombre: No mucho. Principalmente es que hace mucho viento. Casi no se puede usar el paraguas.\nMujer: Entonces ve rápido a darte un baño de agua caliente. No te vayas a resfriar.\nHombre: Bien." },
+"3_5_4": { "zh": "男: 房子 找好了 吗? 什么时候 搬?\n女: 这个 周末。\n男: 找 搬家 公司 了 吗?\n女: 没有. 我 朋友 有车. 他 说 会 来 帮忙。", "es": "Hombre: ¿Ya encontraste casa? ¿Cuándo te mudas?\nMujer: Este fin de semana.\nHombre: ¿Contrataste una empresa de mudanzas?\nMujer: No. Mi amigo tiene coche. Dijo que vendría a ayudar." },
+"3_6_1": { "zh": "女: Mira, ¿qué te parece este bolso?\n男: 不错, 但是 我 觉得 旁边 那个 上面 有 月亮的 更好看。", "es": "Mujer: Mira, ¿qué te parece este bolso?\nHombre: No está mal, pero creo que aquel de al lado que tiene una luna es más bonito." },
+"3_6_2": { "zh": "男: 这条 鱼 看起来 不太 新鲜. 你 在 哪儿 买 service 的?\n女: 就是 路口 我们 常去的 那家 超市, 我 还 买了 些 苹果。", "es": "Hombre: Este pescado no parece muy fresco. ¿Dónde lo compraste?\nMujer: Es el supermercado del cruce al que solemos ir, también compré algunas manzanas." },
+"3_6_3": { "zh": "女: 你 等一下. 我 写在 本子 上. 我们 过一会儿 忘了。\n男: 好, 那 我 慢点儿 说。", "es": "Mujer: Espera un momento. Lo escribiré en el cuaderno. No sea que lo olvidemos en un rato.\nHombre: Está bien, entonces hablaré más despacio." },
+"3_6_4": { "zh": "男: 你 学会 用 筷子 了?\n女: 是定的, 一个 中国 朋友 教我的. 我 练习了 好几天 才 学会。", "es": "Hombre: ¿Has aprendido a usar los palillos?\nMujer: Sí, me enseñó un amigo chino. Practiqué durante varios días antes de aprender." },
+"3_6_5": { "zh": "女: 还要 多久  啊? 我 都 站了 一个 小时 了. 太累了!\n男: 我 很快 就 画完了, 姐, 你 站好, 别动。", "es": "Mujer: ¿Cuánto falta todavía? Llevo una hora de pie. ¡Estoy muy cansada!\nHombre: Terminaré de dibujar pronto; hermana, quédate bien ahí, no te muevas." },
+"3_6_6": { "zh": "男: 我 打算 周末 请 同事 来 家里 做客, 所以 今天 要把 房间 好好 打扫 一下。", "es": "Hombre: Tengo planeado invitar a mis colegas a casa este fin de semana, así que hoy tengo que limpiar bien la habitación." },
+"3_6_7": { "zh": "男: 我 简单 介绍 一下. 公司 的 工作 时间  是 从 早上 八点 到 下午 5点. 中午 12点 到 1点半 休息。", "es": "Hombre: Haré una breve presentación. El horario de trabajo de la empresa es de 8 de la mañana a 5 de la tarde.\nHombre: El descanso es de 12 del mediodía a 1:30." },
+"3_6_8": { "zh": "男: 我 爸爸 是个 历史 老师. 经常 给我 讲 历史 故事. 在 他的 影响下 我 从小 就 对 历史 感兴趣。", "es": "Hombre: Mi padre es profesor de historia. A menudo me cuenta historias históricas.\nHombre: Bajo su influencia, me intereso por la historia desde pequeño." },
+"3_6_9": { "zh": "女: 你 妻子 怎么 没和 你 一起来?\n男:  她 系统的 爷爷 出院 了. 她 这几天 都在 医院 照顾 他 呢。", "es": "Mujer: ¿Como es que tu esposa no ha venido contigo?\nHombre: Su abuelo recibió el alta. Ella ha estado estos días en el hospital cuidándolo." },
+"3_6_10": { "zh": "女: 我 中午 只 吃了 点儿 菜, 没吃 米饭. 现在  真饿。\n男: 冰箱里 有块儿 蛋糕. 你 去 吃了 吧。", "es": "Mujer: A mediodía solo comí algo de verdura, no comí arroz. Ahora tengo mucha hambre.\nHombre: Hay un trozo de pastel en la nevera. Ve a comértelo." },
+"3_7_1": { "zh": "男: 你 不去 留学 了?\n女: 对, 我 已经 在 南方 一个 城市 找好 工作 了。", "es": "Hombre: ¿Ya no te vas a estudiar al extranjero?\nMujer: No, ya he encontrado un trabajo en una ciudad del sur." },
+"3_7_2": { "zh": "男: 你的 自行车 在 楼下 吗? 借我 骑 一下。\n女: 你 什么时候 回来? 我 下午 也要 用。\n男: 我 去 图书馆 还 两本 书 就 回来。\n女: 那 没关系. 你 去 骑 吧。", "es": "Hombre: ¿Tu bicicleta está abajo? Préstamela un momento.\nMujer: ¿Cuándo volverás? Yo también la necesito por la tarde.\nHombre: Voy a la biblioteca a devolver dos libros y vuelvo.\nMujer: Entonces no importa. Ve a usarla." },
+"3_7_3": { "zh": "女: 王老师, 校长 让你 去 他 办公室 一下。\n男: 他 说  A什me 事 了 吗?\n女: 没有, 但 可能 跟 这次 的 体育 成绩 有关系。", "es": "Mujer: Profesor Wang, el director le pide que vaya un momento a su oficina.\nHombre: ¿Dijo de qué se trata?\nMujer: No, pero posiblemente tenga relación con las notas de educación física de esta vez." },
+"3_7_4": { "zh": "男: 这些 照片 都是 你 照 de?\n女: 对. 我 照得 怎么样?\n男: 照相 水平 比 以前 提高 了 不少。\n女: 真的? 我 现在 几乎 天天 带着 相机 出门。", "es": "Hombre: ¿Todas estas fotos las has hecho tú?\nMujer: Sí. ¿Qué tal me han salido?\nHombre: Tu nivel de fotografía ha mejorado mucho respecto a antes.\nMujer: ¿De verdad? Ahora salgo de casa con la cámara casi todos los días." },
+"3_7_5": { "zh": "女: 你 去过 这里 的 动物园 吗?\n男: 听说 很有名, 但 一直 没机会 去。\n女: 我 这儿 有  张 大熊猫 文化节 的 票. 一起 去 吧?\n男: 好啊. 不知道 节日 那天 人 多不多。", "es": "Mujer: ¿Has estado en el zoológico de aquí?\nHombre: He oído que es muy famoso, pero no he tenido oportunidad de ir.\nMujer: Tengo aquí dos entradas para el Festival Cultural del Panda Gigante. ¿Vamos juntos?\nHombre: ¡Vale! No sé si habrá mucha gente el día del festival." },
+"3_7_6": { "zh": "女: 足球赛 这么快 就 结束了?\n男: 没有. 我 头疼, 所以 就 先 回来 了。\n女: 是prefix_not_enot 感ismo 了?\n男: 是, 还有点儿 发烧. 家里 有药 吗?", "es": "Mujer: ¿Tan pronto ha terminado el partido de fútbol?\nHombre: No. Me dolía la cabeza, así que me he vuelto antes.\nMujer: ¿No será que te has resfriado?\nHombre: Sí, y tengo un poco de fiebre. ¿Hay medicina en casa?" },
+"3_7_7": { "zh": "女: 来 北京 快 一个月 了. 还 习惯 吗?\n男: 还好, 就是 太冷 了。\n女: 北京 的 冬天 是 很冷. 你们 国家 天气 怎么样?\n男: 我们 那儿 一年四季 都 很热。", "es": "Mujer: Hace ya casi un mes que llegaste a Beijing. ¿Te has acostumbrado?\nHombre: Bastante bien, solo que hace demasiado frío.\nMujer: El invierno en Beijing es muy frío. ¿Qué tal es el tiempo en tu país?\nHombre: Allí hace calor durante las cuatro estaciones del año." },
+"3_7_8": { "zh": "男: 李小姐, 这个 房子 您 还 满意 吧?\n女: 除了 没 电梯 不太 方便 外, 其他 的 都 不错。\n男: 三层 也不高. 两分钟 就 上来 了。", "es": "Hombre: Señorita Li, ¿está satisfecha con este piso?\nMujer: Aparte de que no hay ascensor y es poco conveniente, lo demás está todo bien.\nHombre: El tercer piso no es alto. Se sube en dos minutos." },
+"3_7_9": { "zh": "女: 先生, 这是 菜单, 请问, 你 需要 点儿  A什me?\n男: 一碗 鸡蛋面, 一瓶 啤酒。\n女: 好的. 您 在 这儿 吃  还是 带走?\n男: 带走。", "es": "Mujer: Señor, aquí tiene el menú. Perdone, ¿qué desea pedir?\nHombre: Un bol de fideos con huevo y una botella de cerveza.\nMujer: Muy bien. ¿Para comer aquí o para llevar?\nHombre: Para llevar." },
+"3_8_1": { "zh": "男: 开始 刮风 了, 天 也 越来越 黑. 可能 很快 就会 下雨, 我们 还是 早点儿 回que 吧。", "es": "Hombre: Ha empezado a soplar el viento y el cielo está cada vez más oscuro.\nHombre: Es posible que llueva pronto, será mejor que regresemos temprano." },
+"3_8_2": { "zh": "男: 我 把 书 放在 教室 的 桌子 上了. 如果 你 要用 的 话, 可以 自己 去 拿。", "es": "Hombre: He dejado el libro sobre la mesa de la clase. Si necesitas usarlo, puedes ir tú mismo a cogerlo." },
+"3_8_3": { "zh": "男: 现在 已经 9点 了, 会议 什么时候 开始?\n女: 再过 半个 小时 吧. 会议室 的 灯 坏了。", "es": "Hombre: Ya son las 9, ¿cuándo empieza la reunión?\nMujer: En una media hora. La luz de la sala de reuniones se ha estropeado." },
+"3_8_4": { "zh": "男: 我的 电脑 总是 有 奇怪 的 声音. 你 知道 是 怎么 回事 吗?\n女: 我 不太 清楚, 你 可以 拿过来 给我 看看。", "es": "Hombre: Mi ordenador force siempre hace ruidos extraños. ¿Sabes a qué se debe?\nMujer: No lo tengo muy claro, puedes traérmelo para que le eche un vistazo." },
+"3_8_5": { "zh": "男: 我们 决定 结婚 了, 就在 今年 秋天. 你 能来 吗?\n女: 太好了, 真为 你们 高兴. 我 一定 会 参加 的。", "es": "Hombre: Hemos decidido casarnos, será este otoño. ¿Puedes venir?\nMujer: ¡Qué bien! Me alegro mucho por vosotros. Sin duda asistiré." },
+"3_8_6": { "zh": "男: 你 穿 这条 裙子. 真 好看。\n女: 如果 我 再 瘦 一点儿 就 更好 了。\n男: 其实 你 不胖 啊!\n女: 女人 总是 希望 自己 能 更瘦 一些。", "es": "Hombre: Te queda muy bien ese vestido. Estás muy guapa.\nMujer: Si estuviera un poco más delgada sería mejor.\nHombre: ¡En realidad no estás gorda!\nMujer: Las mujeres siempre desean estar más delgadas." },
+"3_8_7": { "zh": "男: 我的 信用卡 不见了。\n女: 你 先 别急着 找, 好好 想想 放在 哪儿 了。\n男: 我 我 刚才 去了 银行。\n女: 可能是 忘在 那儿 了 吧。", "es": "Hombre: Mi tarjeta de crédito ha desaparecido.\nMujer: No te desesperes buscándola todavía, piensa bien dónde la pusiste.\nHombre: Hace un momento estuve en el banco.\nMujer: Probablemente se te olvidó allí." },
+"3_8_8": { "zh": "女: 我 必须 在 3:00 前 到 火车站. 不会 晚 吧。\n男: 放心 吧, 车站 就在 附近, 你 要去 南门 还是 北门?\n女: 不太 清楚, 我 买 de 是 快车票。\n男: 快车 一般 都从 北门 上车。", "es": "Mujer: Debo llegar a la estación antes de las 3:00. No llegaré tarde, ¿verdad?\nHombre: No te preocupes, la estación está cerca. ¿Vas a la puerta sur o a la norte?\nMujer: No estoy muy segura, compré un billete de tren rápido.\nHombre: Los trenes rápidos suelen salir de la puerta norte." },
+"3_8_9": { "zh": "男: 狗 真 可爱。\n女: 它们 还 非常 聪明 呢。\n男: 真 希望 有 一天 我能 有 一一只 系统的 狗。\n女: 一定 会 的。", "es": "Hombre: Los perros son realmente adorables.\nMujer: Además son muy inteligentes.\nHombre: De verdad espero tener algún día mi propio perro.\nMujer: Seguro que sí." },
+"3_8_10": { "zh": "男: 妈妈, 你 怎么 这么 晚 还 出去 啊?\n女: 你 爸爸 喝了 点儿 酒, 开不了 车. 我 去 接  他。\n男: 天黑 了, 出门 要 小心。\n女: 好, 一 接to 你爸, 我 就 回来。", "es": "Hombre: Mamá, ¿como es que sales tan tarde?\nMujer: Tu padre ha bebido un poco de alcohol y no puede conducir. Voy a recogerlo.\nHombre: Ha oscurecido, ten cuidado al salir.\nMujer: De acuerdo, en cuanto recoja a tu padre, volveré." },
+"3_9_1": { "zh": "男: 看一下 手表, 现在 几点 了?\n女: 三点 零二. 说 三点半 到, 还差  半个 小时 呢, 再 等等 吧。\n男: 叔叔 和  阿yi 是 第一次 来 北京, 会不会 走错路 了?\n女: 我 再 打个 电话 问问。", "es": "Hombre: Mira el reloj, ¿qué hora es?\nMujer: Las tres y dos. Dijeron que llegarían a las tres y media, falta media hora todavía, esperemos un poco más.\nHombre: Es la primera vez que mis tíos vienen a Beijing, ¿se habrán equivocado de camino?\nMujer: Voy a llamar de nuevo para preguntar." },
+"3_9_2": { "zh": "女: 你 终于 来了, 都 八点 一刻 了。\n男: 对不起, 来 机场 的 路上 才 发现 没带 护照。", "es": "Mujer: Por fin llegas, ya son las ocho y cuarto.\nHombre: Lo siento, de camino al aeropuerto me di cuenta de que no traía el pasaporte." },
+"3_9_3": { "zh": "女: 小心 点儿, 你 一个人 可以 吗?\n男: 你 放心 吧. 系统的 厨房 又 不是 第一次 出问题。", "es": "Mujer: Ten cuidado, ¿puedes tú solo?\nHombre: No te preocupes. No es la primera vez que nuestra cocina da problemas." },
+"3_9_4": { "zh": "男: 这样 可以 吗?\n女: 左边 低了, 再 高 一点儿。", "es": "Hombre: ¿Así está bien?\nMujer: El lado izquierdo está bajo, súbelo un poco más." },
+"3_9_5": { "zh": "女: 现在 天 “短” 了。\n男: 天 “短” 了 是 什么 意思? 我 没听懂。\n女: 就是 说 白天 的 时间 短了, 天黑 的 时间 早了, 明白了?\n男: 我 明白了, 就是 晚上 的 时间 长了, 白天 的 时间 短了。", "es": "Mujer: Ahora el día se ha \"acortado\".\nHombre: ¿Qué significa que el día se ha \"acortado\"? No lo entiendo.\nMujer: Quiere decir que el tiempo de luz diurna es más breve y oscurece antes, ¿entiendes?\nHombre: Entiendo, es que el tiempo de noche es más largo y el de día más corto." },
+"3_9_6": { "zh": "男: 经常 吃 甜的 东西 容易 变胖。\n女: 我 同意, 所以 我 不吃 糖。\n男: 那 你 怎么 还敢 吃 那么 多 蛋糕?\n女: 没关系, 这种 蛋糕 不甜, 没放 糖。", "es": "Hombre: Comer cosas dulces a menudo hace que uno engorde fácilmente.\nMujer: Estoy de acuerdo, por eso no como azúcar.\nHombre: ¿Entonces cómo es que te atreves de comer tanto pastel?\nMujer: No pasa nada, este tipo de pastel no es dulce, no lleva azúcar." },
+"3_9_7": { "zh": "男: 明天 是 妹妹 的 生日, 我 给他 买了 本 汉语 字典。\n女: 你 怎么 知道 她 在 学 汉语? 我 还以为 你 不关心 系统的 学习 呢。", "es": "Hombre: Mañana es el cumpleaños de mi hermana menor, le he comprado un diccionario de chino.\nMujer: ¿Cómo sabes que está studying chino? Pensaba que no te interesabas por sus estudios." },
+"3_9_8": { "zh": "女: 给我 来 一杯  果zhi儿 吧, 谢谢。\n男: 不客气, 冰箱里 没有 葡萄 汁儿 了, 就 喝 这个 吧。", "es": "Mujer: Ponme un vaso de zumo, gracias.\nHombre: De nada, no queda zumo de uva en la nevera, bebe este." },
+"3_9_9": { "zh": "男: 眼镜、帽子、地图、啤酒, 一个 也  能少。。\n女: 好了, 准备得 很 认真, 我 相信  已经 准备 好了。", "es": "Hombre: Gafas, gorra, mapa, cerveza... no puede faltar ni una cosa.\nMujer: Muy bien, te has preparado con mucha dedicación, confío en que ya estés listo." },
+
+// NIVEL 4
+"4_1_1": { "zh": "女: 把 香蕉皮 扔到 垃圾桶 里 去, 以后 别 随便 扔 东西。\n男: 知道了, 奶奶。\n女: 数学 作业 写完了 吗?\n男: 没 呢, 我 先 出去 玩儿 一会儿, 您 在家 休息 吧。", "es": "Mujer: Tira la piel de plátano a la papelera, no tires cosas a la ligera en el futuro.\nHombre: Lo sé, abuela.\nMujer: ¿Has terminado los deberes de matemáticas?\nHombre: Todavía no, saldré a jugar un rato primero, descanse usted en casa." }, 
+"4_1_2": { "zh": "男: 我 约了 几个 同学 星期六 上午 去 打 网球, 你 也 去?\n女: 可是 我 不会 打 网球。\n男: 那 你 会 打 羽毛球 吗?\n女: 会。\n男: 网球 跟 羽毛球 差不多, 很好 学, 到时候 我 教 你。", "es": "Hombre: He quedado con unos compañeros de clase para jugar al tenis el sábado por la mañana, ¿tú también vas?\nMujer: Pero yo no sé jugar al tenis.\nHombre: Entonces, ¿sabes jugar al bádminton?\nMujer: Sí.\nHombre: El tenis es parecido al bádminton, es muy fácil de aprender, ya te enseñaré cuando llegue el momento." }, 
+"4_1_3": { "zh": "女: 师傅, 请问 还有 饼干 吗?\n男: 卖完了, 蛋糕 还要 吗?\n女: 刚 出炉 的 蛋糕 挺 香的, 给我 来 两个 吧, 多少 钱?\n男: 每一个 六块钱, 一共 十二块。", "es": "Mujer: Señor, disculpe, ¿quedan galletas?\nHombre: Se han agotado, ¿quiere pastel?\nMujer: El pastel recién horneado huele muy bien, déme dos, ¿cuánto cuesta?\nHombre: Seis yuanes cada uno, doce en total." }, 
+"4_1_4": { "zh": "男: 听说 你 准备 买 房子? 看了 几家 了?\n女: 看了 两个 地方, 感觉 都不错, 离 公司 挺 近的, 坐 地铁 二十分钟 就 到了。\n男: 那 房租 贵不贵 呢?\n女: 挺 贵的, 我 还在 考虑。", "es": "Hombre: ¿He oído que planeas comprar una casa? ¿Cuántas has visto ya?\nMujer: He visto dos lugares y ambos me parecen bien, están bastante cerca de la empresa, se llega en veinte minutos en metro.\nHombre: Entonces, ¿el alquiler es caro?\nMujer: Bastante caro, todavía lo estoy pensando." }, 
+"4_1_5": { "zh": "女: 天气 预报 说 明天 有 大雪, 你 外出 的 时候 多 穿 点儿 衣服。\n男: 好的, 我 知道了, 谢谢 你的 提醒。\n女: 还有, 别 忘了 带 把 伞。\n男: 好的。", "es": "Mujer: El pronóstico del tiempo dice que mañana habrá fuertes nevadas, ponte más ropa cuando salgas.\nHombre: De acuerdo, lo sé, gracias por tu recordatorio.\nMujer: Además, no olvides llevar un paraguas.\nHombre: De acuerdo." }, 
+"4_2_1": { "zh": "女: 这张 纸 上 写的 都是 什么 呀?\n男: 我们 班 同学 的 电话 号码 和 名字。\n女: 给我 看看...... 哎, 怎么 没有 小王 的?\n男: 啊? 我 看看, 真的 吗? 噢, 我 漏掉 了, 我 现在 就 加上。", "es": "Mujer: ¿Qué es todo esto que está escrito en este papel?\nHombre: Los números de teléfono y nombres de mis compañeros de clase.\nMujer: Déjame ver... ¡Anda! ¿Por qué no está el de Xiao Wang?\nHombre: ¿Ah? Déjame ver, ¿de verdad? Oh, se me pasó por alto, lo añadiré ahora mismo." }, 
+"4_2_2": { "zh": "男: 你 再 仔细 看看, 是不是 哪儿 错了?\n女: 没有 啊, 一共 五台 电脑、 三张 办公桌, 还有......\n男: 不对, 你 把 电脑 和 桌子 的 数量 写反了。\n女: 对不起, 我 写错了, 我 再 重新 填 一张 单子 吧。", "es": "Hombre: Vuelve a mirar con atención, ¿no hay algún error?\nMujer: No, en total son cinco ordenadores, tres mesas de oficina, y además...\nHombre: No es correcto, has escrito al revés la cantidad de ordenadores y de mesas.\nMujer: Lo siento, me he equivocado al escribir, volveré a rellenar otro formulario." }, 
+"4_2_3": { "zh": "女: 小李, 帮 我 把 这份 材料 复印 五份, 一会儿 开会 要 用。\n男: 好的, 经理, 我 现在 就 去办。\n女: 还有, 复印 好了 以后 拿到 二楼 的 会议室 给我。\n男: 没问题, 经理。", "es": "Mujer: Xiao Li, ayúdame a fotocopiar este documento cinco veces, se usará en la reunión dentro de un momento.\nHombre: De acuerdo, gerente, iré a hacerlo ahora mismo.\nMujer: Además, una vez fotocopiado, llévalo a la sala de reuniones del segundo piso y dámelo.\nHombre: Sin problema, gerente." }, 
+"4_3_1": { "zh": "男: 听说 你 去 参加 那个 比赛了? 结果 怎么样?\n女: 别提了, 刚 进去 就 被 淘汰了。\n男: 没关系, 以后 还有 机会, 别 难过。\n女: 我 没 难过, 就是 觉得 挺 遗憾的。", "es": "Hombre: ¿He oído que fuiste a participar en ese concurso? ¿Cómo quedó la cosa?\nMujer: Ni me lo hables, fui eliminada nada más entrar.\nHombre: No pasa nada, habrá más oportunidades en el futuro, no te pongas triste.\nMujer: No estoy triste, solo siento que es una lástima." }, 
+"4_3_2": { "zh": "女: 你的 皮肤 怎么 这么 好? 有 什么 特别的 方法 吗?\n男: 哪有 什么 特别 的 方法, 我 就是 每天 多 喝水, 多 吃 水果。\n女: 就 这么 简单?\n男: 对, 还有 要 保证 充足 的 睡眠。", "es": "Mujer: ¿Cómo es que tienes la piel tan bien? ¿Tienes algún método especial?\nHombre: Qué va a haber un método especial, yo simplemente bebo mucha agua y como mucha fruta todos los días.\nMujer: ¿Así de simple?\nHombre: Sí, y también hay que asegurar un sueño suficiente." }, 
+"4_3_3": { "zh": "男: 这次 招聘 的 要求 挺 高的, 你 有 把握 吗?\n女: 虽然 我 毕业 的 学校 不是 最 有名的, 但 我的 工作 经验 丰富, 应该 没 问题。\n男: 祝 你 成功!\n女: 谢谢!", "es": "Hombre: Los requisitos para esta oferta de empleo son bastante altos, ¿estás segura?\nMujer: Aunque la escuela de la que me gradué no es la más famosa, mi experiencia laboral es rica, así que no debería haber problema.\nHombre: ¡Te deseo éxito!\nMujer: ¡Gracias!" }, 
+"4_4_1": { "zh": "女: 你 学习 功夫 多长时间 了?\n男: 从 六岁 开始, 到 现在 已经 二十多年 了。\n女: 一定 挺 辛苦、 挺 累的 吧?\n男: 是, 不过 回头 想想, 虽然 辛苦, 但 一切 都是 值得 的。", "es": "Mujer: ¿Cuánto tiempo llevas aprendiendo kung-fu?\nHombre: Empecé desde los seis años, y hasta ahora ya han pasado más de veinte años.\nMujer: Debe de ser muy duro y agotador, ¿verdad?\nHombre: Ciertamente lo es, pero mirando atrás, aunque fue difícil, todo ha valido la pena." }, 
+"4_4_2": { "zh": "男: 小王 的 孩子 出生了? 男孩儿 还是 女孩儿?\n女: 女孩儿, 两周 前 出生的。\n男: 我 还没 来得及 去 祝贺 他 呢。\n女: 我 也 没 去, 哪天 我们 一起 去 吧。", "es": "Hombre: ¿Ha nacido el hijo de Xiao Wang? ¿Es niño o niña?\nMujer: Es una niña, nació hace dos semanas.\nHombre: Todavía no he tenido tiempo de ir a felicitarlo.\nMujer: Yo tampoco he ido, vayamos juntos un día de estos." }, 
+"4_4_3": { "zh": "女: 我们 去 趟 超市 吧, 明天 出去 玩儿 得 买 点儿 饼干 和 面包。\n男: 好, 还有 矿泉水、 果汁 什么 的。\n女: 对。 你 记得 拿 几个 塑料袋 放 车里, 到时候 用。\n男: 好的。", "es": "Mujer: Vamos al supermercado, mañana salimos a divertirnos y tenemos que comprar algunas galletas y pan.\nHombre: Bien, y también agua mineral, zumo de frutas y cosas así.\nMujer: Sí. Acuérdate de coger unas bolsas de plástico para ponerlas en el coche y usarlas cuando llegue el momento.\nHombre: De acuerdo." }, 
+"4_4_4": { "zh": "男: 你好, 我 想要 换 一些 零钱, 方便 吗?\n女: 您 好, 请问 您 想 怎么 换?\n男: 把 这张 一百的 换成 两张 五十的 吧。\n女: 好的, 给 您, 请 数 一下。", "es": "Hombre: Hola, me gustaría cambiar algo de dinero suelto, ¿le viene bien?\nMujer: Hola, disculpe, ¿cómo le gustaría cambiarlo?\nHombre: Cambie este billete de cien por dos de cincuenta.\nMujer: De acuerdo, aquí tiene, cuéntelo por favor." }, 
+"4_4_6": { "zh": "关于 读书, 有 两点 必须 要 注意: 第一, 书 不可 不 读。 书 会 让 系统的 知识 更 丰富, 生活 更 精彩。 第二, 不能 读 死书。 读书 的 时候, 如果 没有 一点儿 自己 的 想法 和 判断, 完全 相信 书本 上 的 内容, 那么 读书 对 自己 什么 帮助 都没有。", "es": "Respecto a la lectura, hay dos puntos que se deben tener en cuenta: Primero, no se puede dejar de leer libros. Los libros enriquecerán tus conocimientos y harán tu vida más espléndida. Segundo, no se debe leer de forma dogmática. Al leer, si uno no tiene sus propias ideas y juicios y cree completamente en el contenido del libro, entonces la lectura no servirá de ninguna ayuda para uno mismo." }, 
+"4_5_1": { "zh": "女: 打了 一下午 羽毛球, 肚子 有点儿 饿了。\n男: 稍等 一会儿, 饭 马上 就好。\n女: 真 香, 今天 吃 什么?\n男: 你 鼻子 真好, 今晚 我们 吃 饺子。", "es": "Mujer: He estado jugando al bádminton toda la tarde, tengo un poco de hambre.\nHombre: Espera un momento, la comida estará lista enseguida.\nMujer: Qué bien huele, ¿qué comemos hoy?\nHombre: Qué buen olfato tienes, esta noche comemos empanadillas chinas." }, 
+"4_5_3": { "zh": "男: 李 教授, 这 几篇 文章 您 什么时候 要?\n女: 不急, 你 自己 安排, 只要 在 寒假 前 交给 我 就行。\n男: 没问题, 我 肯定 会 提前 完成 的。\n女: 那样 更好。", "es": "Hombre: Profesor Li, ¿para cuándo quiere estos artículos?\nMujer: No hay prisa, organízate tú mismo, con tal de que me los entregues antes de las vacaciones de invierno es suficiente.\nHombre: No amblema, seguro que los terminaré con antelación.\nMujer: Eso sería todavía mejor." }, 
+"4_5_4": { "zh": "女: 先生, 这是 您的 房卡, 请 拿好。\n男: 谢谢! 我的 行李箱 在 哪儿 取 呢?\n女: 我们 一会儿 会 直接 送到 您的 房间。\n男: 谢谢! 麻烦 你们 了。\n女: 不客气。", "es": "Mujer: Señor, aquí tiene la tarjeta de su habitación, guárdela bien.\nHombre: ¡Gracias! ¿Dónde puedo recoger mi maleta?\nMujer: Se la enviaremos directamente a su habitación en un momento.\nHombre: ¡Gracias! Disculpen las molestias.\nMujer: De nada." }, 
+"4_5_5": { "zh": "男: 你好, 我 想要 一个 窗户 旁边 的 座位, 还有 吗?\n女: 我 查 一下。 对不起, 您 乘坐 的 这个 航班 没有 窗户 边 的 座位 了。\n男: 好吧, 没关系。\n女: 给 您 票。", "es": "Hombre: Hola, me gustaría un asiento al lado de la ventana, ¿queda alguno?\nMujer: Déjeme comprobarlo. Lo siento, este vuelo en el que viaja ya no tiene asientos junto a la ventana.\nHombre: Está bien, no pasa nada.\nMujer: Aquí tiene su billete." }, 
+"4_6_2": { "zh": "女: 在 这儿 开 家 分店 怎么样?\n男: 我 刚才 也在 考虑, 周围 很多 写字楼, 但 没 几家 饭店。\n女: 估计 房租 不便宜。\n男: 咱们 先 了解 一下, 然后 再 决定 到底 要不要 开。", "es": "Mujer: ¿Qué tal si abrimos una sucursal aquí?\nHombre: Justo lo estaba pensando hace un momento, hay muchos edificios de oficinas alrededor, pero apenas hay restaurantes.\nMujer: Calculo que el alquiler no será barato.\nHombre: Informémonos primero, y luego decidamos si finalmente la abrimos o no." }, 
+"4_6_3": { "zh": "男: 这个 笑话 确实 有意思, 你 在 哪里 看到的?\n女: 有 一个 网站, 里面 有 很多 有趣的 笑话。\n男: 你 把 网址 发给我, 我 也 去 看看。\n女: 好的。", "es": "Hombre: Este chiste es verdaderamente interesante, ¿dónde lo viste?\nMujer: Hay una página web que tiene un montón de chistes divertidos.\nHombre: Pásame la dirección del sitio web, yo también iré a echar un vistazo.\nMujer: De acuerdo." }, 
+"4_6_4": { "zh": "女: 你 怎么 会 喜欢 看 京剧 呢?\n男: 小时候, 爷爷 差不多 每个月 都 带 我 去 看 一次 京剧。\n女: 京剧 的 内容 大多 是 历史 故事, 你 能 看懂?\n男: 爷爷 会 一边 看 一边 给 我 介绍, 让我 学了 很多 知识。", "es": "Mujer: ¿Cómo es que te gusta ver la ópera de Pekín?\nHombre: De pequeño, mi abuelo me llevaba a ver la ópera de Pekín casi todos los meses.\nMujer: El contenido de la ópera de Pekín son en su mayoría historias históricas, ¿puedes entenderlo?\nHombre: Mi abuelo me lo iba explicando mientras lo veíamos, lo que me hizo aprender muchos conocimientos." }, 
+"4_6_7": { "zh": "男: 你 怎么了?\n女: 我们 本来 说 明天 提前 放假的, 刚才 突然 又 说 有 变化, 让 等 通知。\n男: 那 就 等一等 好了, 也许 一会儿 就有 好消息 了。\n女: 也 只好 这样了。", "es": "Hombre: ¿Qué te ocurre?\nMujer: Originalmente nos habían dicho que mañana salíamos de vacaciones antes de tiempo, pero hace un momento de repente dijeron que hay cambios y que esperemos el aviso.\nHombre: Pues entonces espera un poco, a lo largo de un rato tal vez haya buenas noticias.\nMujer: No queda más remedio que hacer eso." }, 
+"4_7_1": { "zh": "六 到 八岁 的 儿童 普遍 好动, 坐不住, 所以 老师 在 教 这个 年龄段 的 孩子 时, 一定 要 想 办法 引起 系统的 兴趣。 只有 让他们 觉得 你 教 的 内容 有趣, 他们 才会 愿意 跟 你 学, 才 肯 努力地 学。", "es": "Los niños de seis a ocho años son generalmente muy activos y no pueden quedarse quietos, por lo que los profesores, al enseñar a niños de este rango de edad, deben encontrar maneras de despertar su interés. Solo cuando sientan que el contenido que enseñas es interesante, estarán dispuestos a aprender de ti y se esforzarán por estudiar." }, 
+"4_7_2": { "zh": "我 最近 右眼 总是 跳, 医生 说 是因为 我 长时间 面对 电脑, 眼睛 太 累了。 确实, 我 最近 准备 考试, 每天 都要 在 电脑 前 坐 七八个 小时。 看来 我 应该 听 医生 的 话, 多 出去 走走, 让 眼睛 休息 休息。", "es": "Últimamente siempre me tiembla el ojo derecho, el médico dice que es porque paso mucho tiempo frente al ordenador y mis ojos están demasiado cansados. Efectivamente, he estado preparando un examen recientemente y paso de siete a ocho horas al día sentado frente al ordenador. Parece que debería hacer caso al médico, salir a caminar más y dejar descansar los ojos." }, 
+"4_7_4": { "zh": "即使 收入 不多, 也能 让自己 生活得 舒服, 甚至 还能 剩下 不少 钱。 一定 要 根据 实际 收入 情况 来 做 计划, 使 每一分 钱 都 花在 该 花 的 地方 上。", "es": "Todo el mundo necesita aprender cómo gastar dinero. Por muchos ingresos que se tengan, gastar a lo loco te convertirá en un esclavo del sueldo mensual (alguien que gasta todo lo que gana). Las personas que saben gastar, aunque sus ingresos no sean altos, pueden vivir cómodamente e incluso ahorrar bastante dinero. Hay que hacer planes según la situación real de los ingresos, para que cada céntimo se gaste en el lugar donde corresponda." }, 
+"4_8_1": { "zh": "王小姐 在 商场 买 裙子。 她 从 试衣间 出来 后, 售货员 说: “您 穿 这条 裙子 有点儿 大。” 王小姐 却 说: “那 太好了, 我 就 买 这条。” 售货员 感到 很 奇怪, 王小姐 解释 说: “我 穿上 它, 朋友 见了 肯定 会 说 我 减肥 成功了。”", "es": "La señorita Wang está comprando una falda en el centro comercial. Al salir del probador, la dependienta le dice: “Le queda un poco grande esta falda”. Sin embargo, la señorita Wang responde: “¡Perfecto, me llevo esta misma!”. La dependienta se queda muy extrañada y la señorita Wang le explica: “Si me la pongo, seguro que mis amigos dirán que he tenido éxito al adelgazar cuando me vean”." }, 
+"4_8_2": { "zh": "我 刚 看了 这个 照相机 的 使用 说明书, 介绍得 非常 详细, 尤其是 “常见 问题” 那 部分, 总结了 许多 使用 过程 中 容易 出现 的 错误, 我 觉得 很有用, 你 也 看看 吧。", "es": "Acabo de leer el manual de instrucciones de esta cámara, viene explicado de forma muy detallada, especialmente la sección de 'Preguntas frecuentes', donde se resumen muchos errores comunes durante su uso; creo que es muy útil, tú también deberías echarle un vistazo." }, 
+"4_8_4": { "zh": "爷爷 非常 喜欢 京剧, 每晚 都会 和 朋友 去 公园 唱上 几段。 尽管 他们 并不 专业, 但 唱得 很 认真, 每次 都会 吸引 很多 人 在 一旁 观看, 甚至 还有人 想 跟着 他们 学。 最近, 他们 正 商量 教课 的 事情 呢。", "es": "Al abuelo le chifla la ópera de Pekín, todas las noches va al parque con sus amigos a cantar unas cuantas estrofas. A pesar de que no son profesionales, cantan con mucha seriedad, atrayendo siempre a mucha gente a mirar a su alrededor, e incluso hay personas que quieren aprender de ellos. Últimamente están discutiendo el asunto de dar clases." }, 
+"4_9_1": { "zh": "男: 您 能 给 我们 介绍 一些 您 的 成功 经验 吗?\n女: 我 觉得 要 重视 平时 的 积累, 要 多 向 周围 的 人 学习。\n男: 那 您 觉得 您 最大 的 优点 是 一个 什么 呢?\n女: 是 诚实。", "es": "Hombre: ¿Podría presentarnos algunas de sus experiencias de éxito?\nMujer: Creo que hay que dar importancia a la acumulación diaria y aprender más de las personas que nos rodean.\nHombre: ¿Y cuál considera que es su mayor virtud?\nMujer: La honestidad." }, 
+"4_9_2": { "zh": "女: 大学 毕业 后 就 没 联系了, 你 现在 在 哪儿 工作 呢?\n男: 毕业 后 在 老家 工作了 一年, 然后 又 考上了 北京 大学, 读 研究生。\n女: 真 厉害! 是 硕士了。 你 读 什么 专业? 几年?\n男: 教育学, 三年。", "es": "Mujer: No hemos estado en contacto desde la graduación universitaria, ¿dónde trabajas ahora?\nHombre: Después de graduarme trabajé un año en mi tierra natal, y luego aprobé los exámenes para la Universidad de Pekín, para estudiar un posgrado.\nMujer: ¡Qué increíble! Ya eres estudiante de maestría. ¿Qué especialidad estudias? ¿Cuántos años?\nHombre: Pedagogía, tres años." }, 
+"4_9_3": { "zh": "我们 能够 快速、 积极地 找到 问题 的 原因, 及时地 解决 问题, 保质保量地 完成 任务。 非常 感谢 大家 对 我的 支持!", "es": "Nuestra misión ya se ha completado por entero conforme al plan. Durante este período de tiempo, a pesar de que la presión laboral ha sido enorme y nos hemos topado con muchas dificultades en el camino, gracias al apoyo de todos hemos podido encontrar de forma rápida y positiva la causa de los problemas, solucionarlos a tiempo y cumplir la tarea asegurando la calidad y la cantidad. ¡Muchísimas gracias a todos por vuestro apoyo!" }, 
+"4_9_4": { "zh": "舞会 上 最好 不要 直接 拒绝 别人的 邀请, 如果 不得不 拒绝, 可以 告诉 他: “我 有些 累了, 想 休息 一下。” 之后 也不要 很快 又 接受 其他人 的 邀请。", "es": "En los bailes es mejor no rechazar directamente la invitación de los demás, si no queda más remedio que rechazarla, puedes decirle: “Estoy un poco cansado, quiero descansar un momento”. Después de eso tampoco debes aceptar muy rápido la invitación de otra persona." },
+"4_10_1": { "zh": "北风 与 南风 为了 比 谁 更 有 能力 而 吵 了 起来。它们 决定，谁 能 把 人们 身上 的 大衣 脱掉，谁 就 赢了。北风 一开始 就 很 用力，但是 它 刮得 越 厉害，路上 的 人们 感到 越 冷，就 越 不会 脱掉 衣服。南风 却 不一样，南风 一来，春暖花开，温度 也 越来越 高，人们 因为 觉得 暖和，于是 脱掉 了 大衣。最终，南风 赢得 了 比赛。", "es": "El viento del Norte y el viento del Sur discutían para ver quién era más capaz. Decidieron que ganaría quien consiguiera que la gente se quitara el abrigo. El viento del Norte sopló con mucha fuerza desde el principio, pero cuanto más fuerte soplaba, más frío sentía la gente en la calle y menos se quitaba la ropa. El viento del Sur, en cambio, era diferente. Cuando llegaba el viento del Sur, llegaba la primavera y florecían las flores, la temperatura subía cada vez más, y la gente, porque sentía calor, se quitaba el abrigo. Finalmente, el viento del Sur ganó la competición." },
+"4_10_2": { "zh": "快 过年 了，放假 那天，老李 开着 新买 的 车 回家。由于 急着 回家，他 把 车 开得 很快。在 一个 十字路口，一位 交通警察 让 他 停车。老李 下了 车，很 抱歉 地 对 交警 说：\"对不起，我 错了，我 知道 我 的 速度 太快 了。\"交警 回答 他：\"不，你 是 飞得 太 低 了！\"", "es": "Ya casi era Año Nuevo. El día de las vacaciones, el viejo Li conducía su coche nuevo de vuelta a casa. Como tenía prisa por llegar, iba muy rápido. En un cruce, un policía de tráfico le hizo parar. El viejo Li bajó del coche y le dijo muy apenado al policía: \"Lo siento, he cometido un error, sé que iba demasiado rápido\". El policía le respondió: \"No, ¡es que volabas demasiado bajo!\"" },
+"4_10_3": { "zh": "中国 有 句话 叫 \"不管三七二十一\"，意思 是 说 一个 人 不管 现有 条件 怎么样，也 不 考虑 最终 的 结果，就 做 起 事 来，这样 往往 会 白费 力气，得 不到 自己 想要 的 结果。", "es": "En China hay un dicho que dice \"sin importar tres, siete, veintiuno\" (bùguǎn sān qī èrshíyī), que significa que una persona, sin importar cuáles sean las condiciones actuales ni considerar el resultado final, se pone a hacer algo. Así, a menudo acaba malgastando esfuerzos y no consigue el resultado que desea." },
+"4_10_4": { "zh": "要 想 更快 适应 新 环境，其实 有 很多 办法。例如 多 和 周围 的 人 打招呼，在 别人 遇到 麻烦 的 时候 去 帮 一把，或者 跟 别人 聊聊 他 感兴趣 的 事，这些 都 可以 让 身边 的 人 更快 地 接受 你。", "es": "Si quieres adaptarte más rápido a un nuevo entorno, en realidad hay muchas maneras. Por ejemplo, saludar más a la gente de alrededor, echar una mano cuando alguien tenga algún problema, o hablar con los demás sobre cosas que les interesen. Todo esto puede hacer que la gente de tu alrededor te acepte más rápidamente." },
+"4_10_5": { "zh": "小蓝，你 把 这些 材料 按照 时间 顺序 整理 一下，中午 吃饭 前 交给 我 就行。另外，关医生 回来 后，让 她 来 我 办公室 一趟。", "es": "Xiao Lan, ordena estos materiales según el orden cronológico y entrégamelos antes de la hora de comer. Además, cuando vuelva la doctora Guan, dile que pase por mi despacho." },
+"4_11_1": { "zh": "小周，你 这个 总结 写得 不错，尤其 是 公司 这一年 的 发展 情况 和 取得 的 成绩 这 两部分，内容 很 详细。但是 还有 几个 地方 需要 改 一下，比如 一些 大事 的 排列 顺序 等等。我 都 帮 你 画 出来 了，你 改完 再 重新 发 我 一份。", "es": "Xiao Zhou, este resumen que has escrito está bastante bien, especialmente las dos partes sobre la situación del desarrollo de la empresa durante este año y los logros obtenidos, el contenido es muy detallado. Pero aún hay algunos lugares que necesitan modificarse, como por ejemplo el orden de los acontecimientos importantes, etc. Ya te lo he marcado todo. Cuando termines de corregirlo, envíame otra copia." },
+"4_11_2": { "zh": "一个 城市 的 交通，反映 这个 城市 的 经济 发展 水平，尤其 是 公共 交通，对 社会 的 发展 有 很大 影响。", "es": "El transporte de una ciudad refleja el nivel de desarrollo económico de esa ciudad. Especialmente el transporte público, tiene una gran influencia en el desarrollo de la sociedad." },
+"4_11_3": { "zh": "怎么样 才能 找到 适合 自己 的 人？两个 人 共同 生活，不仅 需要 浪漫 的 爱情，更 需要 性格 上 互相 吸引，最 重要 的 是，两个 人 都 要 有 对 家 的 责任感。", "es": "¿Cómo encontrar a la persona adecuada para uno? Dos personas que viven juntas no solo necesitan un amor romántico, sino que necesitan aún más atraerse mutuamente por su carácter. Lo más importante es que ambos tengan sentido de responsabilidad hacia el hogar." },
+"4_11_4": { "zh": "现在，做 一个 网站 变得 越来越 容易 了。不仅 许多 公司 有 网站，而且 很多 人 都 有 自己 的 网站。访问 各种 各样 的 网站 已经 成为 人们 生活 的 一部分，网站 极大 地 丰富 了 现代人 的 精神 生活。", "es": "Ahora, hacer una página web se está volviendo cada vez más fácil. No solo muchas empresas tienen páginas web, sino que además muchas personas tienen las suyas propias. Visitar todo tipo de páginas web ya se ha convertido en parte de la vida de las personas. Las páginas web han enriquecido enormemente la vida espiritual de la gente moderna." },
+"4_11_5": { "zh": "北京 公交卡 的 使用 范围 越来越 大 了，不仅 可以 坐 地铁、坐 公共汽车，还 可以 在 许多 超市 刷卡 购物，非常 方便。", "es": "El ámbito de uso de la tarjeta de transporte público de Pekín es cada vez mayor. No solo se puede usar para tomar el metro y el autobús, sino que también se puede utilizar para pagar en muchos supermercados con tarjeta, es muy cómodo." },
+"4_11_6": { "zh": "努力 把 事情 做到 最好，这 无疑 是 对的。不过，当 别人 请 你 帮忙 时，对 那些 超出 自己 能力 范围 的 事情，最好 还是 先 考虑 考虑。否则，最后 事情 没 办成，不仅 自己 觉得 丢脸，而且 别人 有 可能 不再 信任 你。", "es": "Esforzarse por hacer las cosas lo mejor posible, sin duda es correcto. Sin embargo, cuando otros te piden ayuda, para aquellas cosas que superan el alcance de tus capacidades, es mejor que lo pienses primero. De lo contrario, si al final no consigues resolverlo, no solo te sentirás avergonzado, sino que además los demás posiblemente dejarán de confiar en ti." },
+"4_11_7": { "zh": "小时候，他 希望 自己 将来 成为 一名 勇敢 的 警察。长大 后，他 却 成为 一名 优秀 的 律师，用 自己 的 法律 知识 来 帮助 别人。", "es": "Cuando era pequeño, esperaba llegar a ser un valiente policía en el futuro. Al crecer, sin embargo, se convirtió en un excelente abogado, usando sus conocimientos de leyes para ayudar a los demás." },
+"4_12_1": { "zh": "我们 可以 通过 身体 动作 表达 很多 感情，例如：害羞 时 我们 会 低下 头，激动 时 我们 会 抬起 头，鼓掌 可以 表示 欢迎，用力 地 握手 表示 信任……当然，不同 地方 人们 的 身体 语言 可能 是 不一样 的，如果 你 不 了解，还 可能 引起 误会。", "es": "Podemos expresar muchos sentimientos a través de los movimientos del cuerpo. Por ejemplo: cuando estamos tímidos bajamos la cabeza, cuando estamos emocionados levantamos la cabeza, aplaudir puede significar bienvenida, estrechar la mano con fuerza significa confianza... Claro está, el lenguaje corporal de la gente de diferentes lugares puede ser diferente, y si no lo conoces, incluso puede causar malentendidos." },
+"4_12_2": { "zh": "学习 一种 语言 不是 简单 的 事情，许多 人 在 开始 学 的 时候 觉得 很 困难，于是 就 放弃 了。但是 只要 坚持 下来，从 最 基础 的 东西 学起，慢慢 就 会 发现 自己 的 变化。这 时候 就 会 增加 我们 的 信心，离 学好 这种 语言 也 就 越来越 近 了。", "es": "Aprender un idioma no es algo sencillo. Muchas personas, cuando empiezan a aprenderlo, lo encuentran muy difícil y entonces lo abandonan. Pero si uno persevera, empieza a aprender desde lo más básico, poco a poco irá descubriendo sus propios cambios. En ese momento aumentará nuestra confianza y estaremos cada vez más cerca de dominar bien ese idioma." },
+"4_12_3": { "zh": "教育 孩子 要 使用 正确 的 方法。首先，不要 用 \"懒\"\"笨\"\"粗心\" 这种 词 批评 孩子，这样 很 容易 让 他们 相信 自己 就是 那样 的，于是 限制 了 他们 正常 的 发展。其次，即使 是 出于 教育 的 目的，也 千万 不能 骗 孩子，因为 儿童 缺少 判断 能力，看到 父母 骗人，他们 也 会 学着 说 假话。", "es": "Para educar a los hijos hay que usar el método correcto. En primer lugar, no se deben usar palabras como \"perezoso\", \"torpe\" o \"descuidado\" para criticar a los niños, porque eso les hace creer fácilmente que son así, y así se limita su desarrollo normal. En segundo lugar, aunque sea con fines educativos, nunca se debe engañar a los niños, porque los niños carecen de capacidad de juicio; al ver que sus padres mienten, ellos también aprenderán a decir mentiras." },
+"4_12_4": { "zh": "世界 上 有 那么多 的 考试，很多 考试 我们 无法 拒绝，不得不 参加，否则 我们 连 \"进门\" 的 机会 都 没有。但 只会 考试，没有 真正 的 知识 和 经验，就算 你 进了 门 也 看 不到 世界 的 精彩。", "es": "En el mundo hay tantos exámenes. Muchos de ellos no podemos rechazarlos y tenemos que hacerlos, porque de lo contrario ni siquiera tendremos la oportunidad de \"entrar por la puerta\". Pero si solo sabes hacer exámenes y no tienes verdaderos conocimientos ni experiencia, aunque entres por la puerta, tampoco podrás ver lo maravilloso del mundo." },
+"4_13_1": { "zh": "回忆 过去，有 苦 也 有 甜，有 伤心、难过 也 有 幸福、愉快，有 很多 故事 让 人 难以 忘记，有 很多 经验 值得 我们 总结。", "es": "Recordando el pasado, hay amargura y también dulzura, hay tristeza, pesares, pero también felicidad y alegría. Hay muchas historias que son difíciles de olvidar, y muchas experiencias que merece la pena que resumamos." },
+"4_13_2": { "zh": "男：所有 的 困难 都 是 暂时 的，要 有 信心，我 相信 你 会 成功 的。\n女：感谢 您 的 支持 和 鼓励，我 一定 会 继续 努力。", "es": "Hombre: Todas las dificultades son temporales, hay que tener confianza, creo que lo conseguirás.\nMujer: Gracias por su apoyo y ánimo, sin duda seguiré esforzándome." },
+"4_13_3": { "zh": "女：真 让 人 受不了！一个 简单 的 动作 让 我们 练 二三十 遍。\n男：老师 对 你们 严格 些 好，可以 让 你们 打好 基础。", "es": "Mujer: ¡Es insoportable! Un movimiento simple nos hace practicarlo veinte o treinta veces.\nHombre: Es bueno que el profesor sea estricto con vosotros, así podéis sentar unas buenas bases." },
+"4_13_4": { "zh": "放弃 并不 代表 认输，而是 代表 新 的 开始。因此，为了 获得 更多，需要 主动 丢掉 一些 不 重要 的 东西。", "es": "Renunciar no significa darse por vencido, sino que representa un nuevo comienzo. Por lo tanto, para obtener más, es necesario deshacerse proactivamente de algunas cosas que no son importantes." },
+"4_13_5": { "zh": "小林，这次 的 招聘 是 由 你 负责 吧？李教授 介绍 了 他 的 一个 学生，是 个 博士，条件 还 不错，这是 他 的 申请 材料，你 看看。", "es": "Xiao Lin, esta contratación la llevas tú, ¿verdad? El profesor Li ha recomendado a uno de sus estudiantes, es doctor, sus condiciones no están mal. Estos son sus materiales de solicitud, échales un vistazo." },
+"4_13_6": { "zh": "没有 人 是 十全十美 的，有 缺点 很 正常。因此 我们 既 要 学会 原谅 别人，也 要 试着 原谅 自己。", "es": "Nadie es perfecto en todos los sentidos, tener defectos es normal. Por lo tanto, debemos aprender tanto a perdonar a los demás como a intentar perdonarnos a nosotros mismos." },
+"4_13_7": { "zh": "男：抱歉，把 你 的 衣服 弄脏 了，我 不是 故意 的。\n女：没关系，你 别 担心，我 回家 洗 一洗 就 可以 了。", "es": "Hombre: Perdona, te he manchado la ropa, no lo hice a propósito.\nMujer: No pasa nada, no te preocupes, cuando llegue a casa la lavo y ya está." },
+"4_13_8": { "zh": "\"怎样 使 自己 的 课 变得 轻松 和 活泼\" 是 很多 老师 都 会 考虑 的 问题。为了 让 学生 更 有 兴趣，老师 不仅 要 准备 丰富 的 内容，还 要 注意 和 学生 交流 的 方法。", "es": "\"Cómo hacer que las propias clases sean relajadas y dinámicas\" es una cuestión que muchos profesores consideran. Para que los estudiantes estén más interesados, los profesores no solo deben preparar contenidos ricos, sino también prestar atención a los métodos de comunicación con los estudiantes." }
+};
+
+let AUDIOS_DETECTADOS = [];
+let transcripcionesDB = {}; 
+let currentTokens = [], currentTranslation = "", currentFilename = "", showTranslation = false, activeRAF = null;
+
+const levelSelect = document.getElementById('levelSelect');
+const lessonSelect = document.getElementById('lessonSelect');
+const audioSelect = document.getElementById('audioSelect');
+const audioPlayer = document.getElementById('audioPlayer');
+const transcriptContainer = document.getElementById('transcriptContainer');
+const audioInfoSpan = document.getElementById('audioInfo');
+const toggleTranslationBtn = document.getElementById('toggleTranslationBtn');
+const syncFixBtn = document.getElementById('syncFixBtn');
+
+function cargarTranscripcionesGuardadas() {
+    const guardado = localStorage.getItem('hsk_karaoke_persistente_v2');
+    if (guardado) {
+        try { transcripcionesDB = JSON.parse(guardado); } catch(e) { console.error("Error", e); transcripcionesDB = {}; }
+    }
+}
+
+function guardarTranscripciones() {
+    localStorage.setItem('hsk_karaoke_persistente_v2', JSON.stringify(transcripcionesDB));
+}
+
+const AUDIO_FILES = [
+"1_2_1.mp3","1_2_2.mp3","1_2_3.mp3","1_2_4.mp3","1_2_5.mp3",
+"1_3_1.mp3","1_3_2.mp3","1_3_3.mp3","1_3_4.mp3",
+"1_4_3.mp3","1_4_4.mp3","1_4_5.mp3",
+"1_5_1.mp3","1_5_3.mp3","1_5_4.mp3","1_5_5.mp3",
+"1_6_1.mp3","1_6_2.mp3","1_6_3.mp3","1_6_4.mp3",
+"1_7_1.mp3","1_7_2.mp3","1_7_3.mp3","1_7_4.mp3",
+"1_8_1.mp3","1_8_2.mp3","1_8_3.mp3","1_8_4.mp3",
+"1_9_1.mp3","1_9_2.mp3","1_9_3.mp3",
+"1_10_1.mp3","1_10_2.mp3","1_10_3.mp3","1_10_4.mp3","1_10_5.mp3","1_10_6.mp3","1_10_7.mp3",
+"2_1_1.mp3","2_1_2.mp3","2_1_3.mp3","2_1_4.mp3",
+"2_2_1.mp3","2_2_2.mp3","2_2_3.mp3","2_2_4.mp3",
+"2_3_1.mp3","2_3_2.mp3","2_3_3.mp3","2_3_4.mp3",
+"2_4_1.mp3","2_4_2.mp3","2_4_3.mp3","2_4_4.mp3",
+"2_5_1.mp3","2_5_2.mp3","2_5_3.mp3","2_5_4.mp3","2_5_5.mp3","2_5_6.mp3","2_5_7.mp3",
+"2_6_1.mp3","2_6_2.mp3","2_6_3.mp3","2_6_4.mp3","2_6_5.mp3","2_6_6.mp3",
+"3_1_1.mp3","3_1_2.mp3","3_1_3.mp3","3_1_4.mp3","3_1_5.mp3",
+"3_2_1.mp3","3_2_2.mp3","3_2_3.mp3","3_2_4.mp3","3_2_5.mp3","3_2_6.mp3","3_2_7.mp3",
+"3_3_1.mp3","3_3_2.mp3","3_3_3.mp3","3_3_4.mp3","3_3_5.mp3","3_3_6.mp3","3_3_7.mp3",
+"3_4_1.mp3","3_4_2.mp3","3_4_3.mp3","3_4_4.mp3","3_4_5.mp3","3_4_6.mp3","3_4_7.mp3",
+"3_5_1.mp3","3_5_2.mp3","3_5_3.mp3","3_5_4.mp3","3_5_5.mp3",
+"3_6_1.mp3","3_6_2.mp3","3_6_3.mp3","3_6_4.mp3","3_6_5.mp3","3_6_6.mp3","3_6_7.mp3","3_6_8.mp3","3_6_9.mp3","3_6_10.mp3",
+"3_7_1.mp3","3_7_2.mp3","3_7_3.mp3","3_7_4.mp3","3_7_5.mp3","3_7_6.mp3","3_7_7.mp3","3_7_8.mp3","3_7_9.mp3",
+"3_8_1.mp3","3_8_2.mp3","3_8_3.mp3","3_8_4.mp3","3_8_5.mp3","3_8_6.mp3","3_8_7.mp3","3_8_8.mp3","3_8_9.mp3","3_8_10.mp3",
+"3_9_1.mp3","3_9_2.mp3","3_9_3.mp3","3_9_4.mp3","3_9_5.mp3","3_9_6.mp3","3_9_7.mp3","3_9_8.mp3","3_9_9.mp3",
+"4_1_1.mp3","4_1_2.mp3","4_1_3.mp3",
+"4_2_1.mp3","4_2_2.mp3","4_2_3.mp3",
+"4_3_1.mp3","4_3_2.mp3","4_3_3.mp3","4_3_4.mp3","4_3_5_rápido.mp3",
+"4_4_1.mp3","4_4_2.mp3","4_4_3.mp3","4_4_4.mp3","4_4_5.m4a","4_4_6_voz humana.mp3","4_4_6_voz sintética.mp3",
+"4_5_1.mp3","4_5_2.mp3","4_5_3.mp3","4_5_4.mp3","4_5_5.mp3","4_5_6.mp3",
+"4_6_1.mp3","4_6_2.mp3","4_6_3.mp3","4_6_4.mp3","4_6_5.mp3","4_6_6.mp3","4_6_7.mp3",
+"4_7_1.mp3","4_7_2.mp3","4_7_3.mp3",
+"4_8_1.mp3","4_8_2.mp3","4_8_3.mp3","4_8_4.mp3",
+"4_9_1.mp3","4_9_2.mp3","4_9_3.mp3","4_9_4.mp3",
+"4_10_1.mp3","4_10_1_mas rápido.mp3","4_10_2_IA.mp3","4_10_2_voz femenina.mp3","4_10_2_voz masculina.mp3","4_10_3_.mp3","4_10_4.mp3","4_10_5_.mp3",
+"4_11_1.mp3","4_11_2.mp3","4_11_3.mp3","4_11_4.mp3","4_11_5.mp3","4_11_6.mp3","4_11_7.mp3",
+"4_12_1.mp3","4_12_2.mp3","4_12_3.mp3","4_12_4.mp3",
+"4_13_1.mp3","4_13_2.mp3","4_13_3.mp3","4_13_4.mp3","4_13_5.mp3","4_13_6.mp3","4_13_7.mp3","4_13_8.mp3"
+];
+
+async function inicializarAudios() {
+    let lista = AUDIO_FILES; // respaldo interno (los 205 audios actuales) si el manifiesto no está disponible
+    try {
+        const resp = await fetch('audios/manifest.json', { cache: 'no-store' });
+        if (resp.ok) {
+            const datos = await resp.json();
+            if (Array.isArray(datos) && datos.length > 0) {
+                lista = datos;
+            }
+        }
+    } catch (e) {
+        // Si falla (por ejemplo al abrir el HTML con doble clic en vez de por servidor), se usa AUDIO_FILES.
+    }
+    AUDIOS_DETECTADOS = lista.map(nombre => {
+        const sinExtension = nombre.replace(/\.[a-zA-Z0-9]+$/, '');
+        const partes = sinExtension.split('_');
+        const comentario = partes.slice(3).join('_');
+        return {
+            file: null,
+            filename: nombre,
+            nivel: partes[0] || "1",
+            leccion: partes[1] || "1",
+            dialogo: partes[2] || "1",
+            comentario: comentario,
+            remoteUrl: 'audios/' + encodeURIComponent(nombre)
+        };
+    });
+    if (AUDIOS_DETECTADOS.length > 0) {
+        actualizarNiveles();
+        audioInfoSpan.innerHTML = `✅ Estado: ${AUDIOS_DETECTADOS.length} audios disponibles en /audios.`;
+    }
+}
+
+function actualizarNiveles() {
+    const niveles = [...new Set(AUDIOS_DETECTADOS.map(a => a.nivel))].sort((a,b) => a-b);
+    levelSelect.innerHTML = niveles.map(n => `<option value="${n}">HSK ${n}</option>`).join('');
+    actualizarLecciones();
+}
+
+function actualizarLecciones() {
+    const nivelSel = levelSelect.value;
+    const lecciones = [...new Set(AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel).map(a => a.leccion))].sort((a,b) => a-b);
+    lessonSelect.innerHTML = lecciones.map(l => `<option value="${l}">Lección ${l}</option>`).join('');
+    updateAudioSelector();
+}
+
+function updateAudioSelector() {
+    const n = levelSelect.value;
+    const l = lessonSelect.value;
+    const filtrados = AUDIOS_DETECTADOS.filter(a => a.nivel === n && a.leccion === l);
+    audioSelect.innerHTML = filtrados.map(a => {
+        const extra = a.comentario ? ` - ${a.comentario}` : '';
+        return `<option value="${a.filename}">Diálogo ${a.dialogo}${extra} (${a.filename})</option>`;
+    }).join('');
+}
+
+function loadSelectedAudio() {
+    currentFilename = audioSelect.value;
+    if (!currentFilename) return;
+    const meta = AUDIOS_DETECTADOS.find(a => a.filename === currentFilename);
+    if (!meta) return;
+
+    if (activeRAF) cancelAnimationFrame(activeRAF);
+    audioPlayer.pause();
+    
+    if (meta.remoteUrl) {
+        audioPlayer.src = meta.remoteUrl;
+    } else if (meta.file) {
+        audioPlayer.src = URL.createObjectURL(meta.file);
+    } else {
+        return;
+    }
+    
+    audioPlayer.onloadedmetadata = () => {
+        const durReal = audioPlayer.duration;
+        const idBusqueda = `${meta.nivel}_${meta.leccion}_${meta.dialogo}`;
+        let data;
+        if (transcripcionesDB[currentFilename]) {
+            data = transcripcionesDB[currentFilename];
+        } else if (HSK_DATA[idBusqueda]) {
+            data = { chinoRaw: HSK_DATA[idBusqueda].zh.replace(/\n/g, ' '), traduccion: HSK_DATA[idBusqueda].es, timings: [], duracion: durReal };
+        } else {
+            data = { chinoRaw: "Escribe la letra aquí", traduccion: "Traducción", timings: [], duracion: durReal };
+        }
+        currentTokens = buildTokensFromRaw(data.chinoRaw, data.timings, durReal);
+        currentTranslation = data.traduccion;
+        audioInfoSpan.innerHTML = `🎵 2. Estado: Cargado ${currentFilename} ${meta.remoteUrl ? '(desde URL)' : '(local)'}`;
+        renderTranscript();
+    };
+}
+
+function buildTokensFromRaw(rawText, timingsArray, totalDur) {
+    if (!rawText) return [];
+    const words = rawText.split(/\s+/).filter(w => w.length > 0);
+    const tokens = [];
+    const dur = totalDur || (words.length * 0.5);
+    for (let i = 0; i < words.length; i++) {
+        let start = (timingsArray && timingsArray.length > i && timingsArray[i] !== undefined) ? timingsArray[i] : (i * (dur / words.length));
+        let end = (timingsArray && timingsArray.length > i + 1) ? timingsArray[i+1] : (start + (dur / words.length));
+        if (i === words.length - 1) end = dur;
+        tokens.push({ word: words[i], start: parseFloat(start), end: parseFloat(end) });
+    }
+    return tokens;
+}
+
+function renderTranscript() {
+    if (!currentTokens || currentTokens.length === 0) {
+        transcriptContainer.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:20px;">🎤 Haz clic en "Cargar audio" para empezar.</div>`;
+        return;
+    }
+    let html = `<div id="karaokeContainer">`;
+    let currentLineHtml = '<div class="dialogue-line">';
+    const speakers = ['男', '女', 'A', 'B', '男1', '男2', '女1', '女2'];
+    currentTokens.forEach((token, idx) => {
+        const cleanWord = token.word.replace(/[:：]/g, '').trim();
+        const isSpeaker = speakers.includes(cleanWord);
+        if (isSpeaker && idx > 0) currentLineHtml += '</div><div class="dialogue-line">';
+        const className = (isSpeaker || token.word.includes(':')) ? 'speaker-label' : 'karaoke-word';
+        currentLineHtml += `<span class="${className}" id="w-${idx}">${escapeHtml(token.word)}</span> `;
+    });
+    currentLineHtml += '</div>';
+    html += currentLineHtml + '</div>';
+    if (showTranslation && currentTranslation) {
+        html += `<div class="translation-container">`;
+        currentTranslation.split('\n').forEach(line => {
+            if (line.trim()) html += `<div class="translation-line">${escapeHtml(line)}</div>`;
+        });
+        html += `</div>`;
+    }
+    transcriptContainer.innerHTML = html;
+}
+
+function startKaraokeSync() {
+    if (activeRAF) cancelAnimationFrame(activeRAF);
+    function sync() {
+        if (!audioPlayer.paused && !audioPlayer.ended) {
+            const time = audioPlayer.currentTime;
+            currentTokens.forEach((t, i) => {
+                const el = document.getElementById(`w-${i}`);
+                if (el) {
+                    if (time >= t.start && time < t.end) el.classList.add('active');
+                    else el.classList.remove('active');
+                }
+            });
+            activeRAF = requestAnimationFrame(sync);
+        }
+    }
+    activeRAF = requestAnimationFrame(sync);
+}
+
+function forceSync() {
+    if (!currentTokens.length || !audioPlayer.duration) return;
+    const dur = audioPlayer.duration;
+    const count = currentTokens.length;
+    currentTokens.forEach((t, i) => {
+        t.start = (i * dur) / count;
+        t.end = ((i + 1) * dur) / count;
+    });
+    if (audioPlayer.paused) {
+        const time = audioPlayer.currentTime;
+        currentTokens.forEach((t, i) => {
+            const el = document.getElementById(`w-${i}`);
+            if (el) {
+                if (time >= t.start && time < t.end) el.classList.add('active');
+                else el.classList.remove('active');
+            }
+        });
+    }
+}
+
+function showAdvancedEditor() {
+    if (!currentFilename) return alert("Carga un audio primero");
+    const currentChino = currentTokens.map(t => t.word).join(' ');
+    const modalHtml = `
+        <div id="modalEditor" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;">
+            <div style="background:white;border-radius:28px;max-width:550px;width:100%;padding:24px;">
+                <h3 style="margin-bottom:15px">✏️ Editor de Persistencia</h3>
+                <textarea id="editChino" rows="5">${currentChino}</textarea>
+                <textarea id="editTrad" rows="4" style="margin-top:10px;">${currentTranslation}</textarea>
+                <div style="margin-top:20px; display:flex; gap:10px;">
+                    <button id="saveMdl" style="background:#22c55e; color:white; flex:1; border:none; padding:12px; border-radius:8px;">💾 Guardar</button>
+                    <button onclick="document.getElementById('modalEditor').remove()" style="background:#e2e8f0; flex:1; border:none; padding:12px; border-radius:8px;">Cancelar</button>
+                </div>
+            </div>
+        </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    document.getElementById('saveMdl').onclick = () => {
+        const raw = document.getElementById('editChino').value.trim();
+        const trad = document.getElementById('editTrad').value.trim();
+        const dur = audioPlayer.duration || 5;
+        const words = raw.split(/\s+/).filter(w => w.length > 0);
+        const autoTimings = words.map((_, i) => (i * dur / words.length));
+        transcripcionesDB[currentFilename] = { chinoRaw: raw, traduccion: trad, timings: autoTimings, duracion: dur };
+        guardarTranscripciones();
+        document.getElementById('modalEditor').remove();
+        loadSelectedAudio();
+    };
+}
+
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+function toggleTranslation() {
+    showTranslation = !showTranslation;
+    toggleTranslationBtn.classList.toggle('active', showTranslation);
+    renderTranscript();
+}
+
+levelSelect.onchange = actualizarLecciones;
+lessonSelect.onchange = updateAudioSelector;
+document.getElementById('loadAudioBtn').onclick = loadSelectedAudio;
+document.getElementById('showEditorBtn').onclick = showAdvancedEditor;
+toggleTranslationBtn.onclick = toggleTranslation;
+audioPlayer.onplay = startKaraokeSync;
+syncFixBtn.onclick = forceSync;
+
+cargarTranscripcionesGuardadas();
+inicializarAudios();
+
+let isPlayingAllLevel = false;
+let currentLevelAudioIndex = 0;
+let currentLevelAudios = [];
+
+document.getElementById('playAllLevelCheck').addEventListener('change', function(e) {
+    isPlayingAllLevel = e.target.checked;
+    
+    const randomBtn = document.getElementById('playRandomLevelBtn');
+    const loopBtn = document.getElementById('playLoopLevelBtn');
+    if (isPlayingAllLevel) {
+        randomBtn.style.display = 'inline-flex';
+        loopBtn.style.display = 'inline-flex';
+    } else {
+        randomBtn.style.display = 'none';
+        loopBtn.style.display = 'none';
+        isPlayingRandomLevel = false;
+        isLoopingLevel = false;
+    }
+    
+    if (isPlayingAllLevel) {
+        const nivelSel = document.getElementById('levelSelect').value;
+        if (!nivelSel) {
+            this.checked = false;
+            isPlayingAllLevel = false;
+            randomBtn.style.display = 'none';
+            loopBtn.style.display = 'none';
+            return;
+        }
+        currentLevelAudios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel);
+        if (currentLevelAudios.length > 0) {
+            currentLevelAudioIndex = 0;
+            isPlayingRandomLevel = false; 
+            isLoopingLevel = false;
+            playNextInLevel();
+        } else {
+            this.checked = false;
+            isPlayingAllLevel = false;
+            randomBtn.style.display = 'none';
+            loopBtn.style.display = 'none';
+        }
+    }
+});
+
+function playNextInLevel() {
+    if (!isPlayingAllLevel || currentLevelAudioIndex >= currentLevelAudios.length) {
+        if (isLoopingLevel) {
+            currentLevelAudioIndex = 0;
+            playNextInLevel();
+            return;
+        }
+        isPlayingAllLevel = false;
+        document.getElementById('playAllLevelCheck').checked = false;
+        document.getElementById('playRandomLevelBtn').style.display = 'none';
+        document.getElementById('playLoopLevelBtn').style.display = 'none';
+        return;
+    }
+    
+    const nextAudio = currentLevelAudios[currentLevelAudioIndex];
+    
+    document.getElementById('lessonSelect').value = nextAudio.leccion;
+    updateAudioSelector(); 
+    document.getElementById('audioSelect').value = nextAudio.filename;
+    
+    loadSelectedAudio();
+    
+    const playHandler = function() {
+        audioPlayer.play();
+        audioPlayer.removeEventListener('loadedmetadata', playHandler);
+    };
+    audioPlayer.addEventListener('loadedmetadata', playHandler);
+}
+
+audioPlayer.addEventListener('ended', function() {
+    if (isPlayingAllLevel) {
+        currentLevelAudioIndex++;
+        playNextInLevel();
+    }
+});
+
+let isPlayingRandomLevel = false;
+let currentRandomLevelAudios = [];
+let currentRandomLevelAudioIndex = 0;
+
+document.getElementById('playRandomLevelBtn').addEventListener('click', function() {
+    const nivelSel = document.getElementById('levelSelect').value;
+    if (!nivelSel) return;
+    
+    isPlayingAllLevel = false;
+    isLoopingLevel = false;
+    
+    let audios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel);
+    if (audios.length > 0) {
+        for (let i = audios.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [audios[i], audios[j]] = [audios[j], audios[i]];
+        }
+        currentRandomLevelAudios = audios;
+        currentRandomLevelAudioIndex = 0;
+        isPlayingRandomLevel = true;
+        playNextRandomInLevel();
+    }
+});
+
+function playNextRandomInLevel() {
+    if (!isPlayingRandomLevel || currentRandomLevelAudioIndex >= currentRandomLevelAudios.length) {
+        if (isLoopingLevel) {
+            currentRandomLevelAudioIndex = 0;
+            playNextRandomInLevel();
+            return;
+        }
+        isPlayingRandomLevel = false;
+        return;
+    }
+    
+    const nextAudio = currentRandomLevelAudios[currentRandomLevelAudioIndex];
+    
+    document.getElementById('lessonSelect').value = nextAudio.leccion;
+    updateAudioSelector(); 
+    document.getElementById('audioSelect').value = nextAudio.filename;
+    
+    loadSelectedAudio();
+    
+    const playHandler = function() {
+        audioPlayer.play();
+        audioPlayer.removeEventListener('loadedmetadata', playHandler);
+    };
+    audioPlayer.addEventListener('loadedmetadata', playHandler);
+}
+
+audioPlayer.addEventListener('ended', function() {
+    if (isPlayingRandomLevel) {
+        currentRandomLevelAudioIndex++;
+        playNextRandomInLevel();
+    }
+});
+
+let isPlayingAllLesson = false;
+let currentLessonAudioIndex = 0;
+let currentLessonAudios = [];
+
+document.getElementById('playAllLessonCheck').addEventListener('change', function(e) {
+    isPlayingAllLesson = e.target.checked;
+    if (isPlayingAllLesson) {
+        if (document.getElementById('playAllLevelCheck')) {
+            document.getElementById('playAllLevelCheck').checked = false;
+            isPlayingAllLevel = false;
+        }
+        isPlayingRandomLevel = false;
+        isLoopingLevel = false;
+
+        const nivelSel = document.getElementById('levelSelect').value;
+        const leccionSel = document.getElementById('lessonSelect').value;
+        if (!nivelSel || !leccionSel) {
+            this.checked = false;
+            isPlayingAllLesson = false;
+            return;
+        }
+        currentLessonAudios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel && a.leccion === leccionSel);
+        if (currentLessonAudios.length > 0) {
+            currentLessonAudioIndex = 0;
+            isLoopingLesson = false;
+            playNextInLesson();
+        } else {
+            this.checked = false;
+            isPlayingAllLesson = false;
+        }
+    }
+});
+
+function playNextInLesson() {
+    if (!isPlayingAllLesson || currentLessonAudioIndex >= currentLessonAudios.length) {
+        if (isLoopingLesson) {
+            currentLessonAudioIndex = 0;
+            playNextInLesson();
+            return;
+        }
+        isPlayingAllLesson = false;
+        document.getElementById('playAllLessonCheck').checked = false;
+        return;
+    }
+    
+    const nextAudio = currentLessonAudios[currentLessonAudioIndex];
+    
+    document.getElementById('audioSelect').value = nextAudio.filename;
+    
+    loadSelectedAudio();
+    
+    const playHandler = function() {
+        audioPlayer.play();
+        audioPlayer.removeEventListener('loadedmetadata', playHandler);
+    };
+    audioPlayer.addEventListener('loadedmetadata', playHandler);
+}
+
+audioPlayer.addEventListener('ended', function() {
+    if (isPlayingAllLesson) {
+        currentLessonAudioIndex++;
+        playNextInLesson();
+    }
+});
+
+let isPlayingRandomLesson = false;
+let currentRandomLessonAudios = [];
+let currentRandomLessonAudioIndex = 0;
+
+document.getElementById('playAllLessonCheck').addEventListener('change', function() {
+    const lessonRandomBtn = document.getElementById('playRandomLessonBtn');
+    const lessonLoopBtn = document.getElementById('playLoopLessonBtn');
+    if (this.checked) {
+        lessonRandomBtn.style.display = 'inline-flex';
+        lessonLoopBtn.style.display = 'inline-flex';
+    } else {
+        lessonRandomBtn.style.display = 'none';
+        lessonLoopBtn.style.display = 'none';
+        isPlayingRandomLesson = false;
+        isLoopingLesson = false;
+    }
+});
+
+document.getElementById('playRandomLessonBtn').addEventListener('click', function() {
+    const nivelSel = document.getElementById('levelSelect').value;
+    const leccionSel = document.getElementById('lessonSelect').value;
+
+    if (!nivelSel || !leccionSel) return;
+
+    isPlayingAllLesson = false;
+    isLoopingLesson = false;
+
+    let audios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel && a.leccion === leccionSel);
+
+    if (audios.length > 0) {
+        for (let i = audios.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [audios[i], audios[j]] = [audios[j], audios[i]];
+        }
+
+        currentRandomLessonAudios = audios;
+        currentRandomLessonAudioIndex = 0;
+        isPlayingRandomLesson = true;
+
+        playNextRandomInLesson();
+    }
+});
+
+function playNextRandomInLesson() {
+    if (!isPlayingRandomLesson || currentRandomLessonAudioIndex >= currentRandomLessonAudios.length) {
+        if (isLoopingLesson) {
+            currentRandomLessonAudioIndex = 0;
+            playNextRandomInLesson();
+            return;
+        }
+        isPlayingRandomLesson = false;
+        return;
+    }
+
+    const nextAudio = currentRandomLessonAudios[currentRandomLessonAudioIndex];
+
+    document.getElementById('audioSelect').value = nextAudio.filename;
+
+    loadSelectedAudio();
+
+    const playHandler = function() {
+        audioPlayer.play();
+        audioPlayer.removeEventListener('loadedmetadata', playHandler);
+    };
+
+    audioPlayer.addEventListener('loadedmetadata', playHandler);
+}
+
+audioPlayer.addEventListener('ended', function() {
+    if (isPlayingRandomLesson) {
+        currentRandomLessonAudioIndex++;
+        playNextRandomInLesson();
+    }
+});
+
+let isLoopingLevel = false;
+let isLoopingLesson = false;
+
+document.getElementById('playLoopLevelBtn').addEventListener('click', function() {
+    const nivelSel = document.getElementById('levelSelect').value;
+    if (!nivelSel) return;
+    
+    isLoopingLevel = !isLoopingLevel;
+    this.style.background = isLoopingLevel ? '#059669' : '#10b981';
+    
+    if (isLoopingLevel) {
+        isPlayingAllLevel = true;
+        document.getElementById('playAllLevelCheck').checked = true;
+        isPlayingRandomLevel = false;
+        currentLevelAudios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel);
+        if (currentLevelAudios.length > 0) {
+            currentLevelAudioIndex = 0;
+            playNextInLevel();
+        }
+    }
+});
+
+document.getElementById('playLoopLessonBtn').addEventListener('click', function() {
+    const nivelSel = document.getElementById('levelSelect').value;
+    const leccionSel = document.getElementById('lessonSelect').value;
+    if (!nivelSel || !leccionSel) return;
+    
+    isLoopingLesson = !isLoopingLesson;
+    this.style.background = isLoopingLesson ? '#059669' : '#10b981';
+    
+    if (isLoopingLesson) {
+        isPlayingAllLesson = true;
+        document.getElementById('playAllLessonCheck').checked = true;
+        isPlayingRandomLesson = false;
+        currentLessonAudios = AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel && a.leccion === leccionSel);
+        if (currentLessonAudios.length > 0) {
+            currentLessonAudioIndex = 0;
+            playNextInLesson();
+        }
+    }
+});
+
+/* ========== NUEVO COMPORTAMIENTO PARA BOTÓN URL (MODAL) ========== */
+</script>
+</body>
+</html>
