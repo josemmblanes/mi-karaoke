@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script>
+  var password = "audios"; // Cambia esto por tu clave
+  var input = prompt("Introduce la contraseña para acceder al Karaoke:");
+  if (input !== password) {
+    document.body.innerHTML = "<h1>Acceso denegado</h1>";
+    window.location.reload();
+  }
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>HSK Karaoke - Scanner & Editor Completo</title>
