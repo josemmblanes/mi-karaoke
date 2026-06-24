@@ -40,7 +40,7 @@
 
         .player-card { margin: 16px 0; padding: 16px 12px; }
         .audio-info { background: #f1f5f9; border-radius: 60px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.8rem; text-align: center; word-break: break-all; }
-        .transcript-area { background: #fefce8; border-radius: 24px; padding: 20px 16px; min-height: 280px; border: 2px solid #fde68a; display: inline-block; width: auto; min-width: 100%; box-sizing: border-box; }
+        .transcript-area { background: #fefce8; border-radius: 24px; padding: 20px 16px; min-height: 280px; border: 2px solid #fde68a; }
         .karaoke-word { display: inline-block; border-radius: 10px; padding: 2px 3px; margin: 0 1px; font-size: 1.2rem; cursor: pointer; transition: background 0.1s; }
         .karaoke-word.active { background-color: #fbbf24; font-weight: 600; }
         
@@ -200,17 +200,6 @@
             font-weight: 500;
             cursor: pointer;
         }
-        /* contenedor para que el transcript se ajuste al contenido */
-        .transcript-wrapper {
-            display: inline-block;
-            width: auto;
-            max-width: 100%;
-        }
-        #transcriptContainer {
-            display: inline-block;
-            width: auto;
-            min-width: 100%;
-        }
     </style>
 </head>
 <body>
@@ -254,9 +243,7 @@
 
     <div class="player-card">
         <audio id="audioPlayer" controls style="width:100%; border-radius: 40px; margin-bottom: 15px;"></audio>
-        <div class="transcript-wrapper">
-            <div class="transcript-area" id="transcriptContainer"></div>
-        </div>
+        <div class="transcript-area" id="transcriptContainer"></div>
     </div>
     
     <footer>💾 Sus ediciones sobreescriben los datos originales de forma permanente.</footer>
