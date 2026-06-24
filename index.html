@@ -2,9 +2,12 @@
 <html lang="es">
 <head>
     <script>
-  var password = "audios"; // Cambia esto por tu clave
+  var encodedPassword = "YXVkaW9z"; 
+  
   var input = prompt("Introduce la contraseña para acceder al Karaoke:");
-  if (input !== password) {
+  
+  // Codificamos lo que el usuario escribe para compararlo
+  if (btoa(input) !== encodedPassword) {
     document.body.innerHTML = "<h1>Acceso denegado</h1>";
     window.location.reload();
   }
