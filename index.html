@@ -1,406 +1,156 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <script>
-  var encodedPassword = "YXVkaW9z"; 
-  var input = prompt("Introduce la contraseña para acceder al Karaoke:");
-  if (btoa(input) !== encodedPassword) {
-    document.body.innerHTML = "<h1>Acceso denegado</h1>";
-    window.location.reload();
-  }
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>HSK Karaoke - Scanner & Editor Completo</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #f0f4f8; padding: 20px 16px 32px; color: #1e293b; }
-        .app-container { max-width: 700px; margin: 0 auto; background: white; border-radius: 36px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 20px 20px 30px; }
-        h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #c2410c, #7c2d12); background-clip: text; -webkit-background-clip: text; color: transparent; text-align: center; margin-bottom: 10px; }
-        .sub { color: #5b6e8c; font-size: 0.8rem; margin-bottom: 24px; border-left: 3px solid #f97316; padding-left: 12px; }
-        .select-group { background: #f8fafc; border-radius: 24px; padding: 16px; margin-bottom: 20px; }
-        .selector-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-        .selector-row label { font-weight: 600; width: 80px; font-size: 1rem; color: #334155; display: flex; align-items: center; gap: 8px; }
-        select { background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 1rem; cursor: pointer; color: #1e293b; }
-        .btn-load { background: #f97316; color: white; flex: 1; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; }
-        .btn-trans { background: #fff7ed; color: #f97316; border: 1px solid #ffedd5; flex: 1; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-trans.active { background: #ffedd5; border-color: #f97316; }
-        .editor-sync-row { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-editor { background: #a855f7; color: white; flex: 2; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; }
-        .btn-sync-fix { background: #ef4444; color: white; flex: 1; padding: 14px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 0.85rem; }
-        .status-bar { background: #f1f5f9; border-radius: 8px; padding: 12px; margin-top: 20px; border-left: 4px solid #1e293b; font-size: 0.9rem; color: #475569; }
-        button:active { opacity: 0.8; transform: scale(0.98); }
-        .player-card { margin: 16px 0; padding: 16px 12px; }
-        .transcript-area { background: #fefce8; border-radius: 24px; padding: 20px 16px; min-height: 280px; border: 2px solid #fde68a; }
-        .karaoke-word { display: inline-block; border-radius: 10px; padding: 2px 3px; margin: 0 1px; font-size: 1.2rem; cursor: pointer; transition: background 0.1s; }
-        .karaoke-word.active { background-color: #fbbf24; font-weight: 600; }
-        textarea { width: 100%; padding: 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-family: monospace; font-size: 0.9rem; margin-top: 8px; }
-        footer { font-size: 0.7rem; text-align: center; margin-top: 24px; color: #94a3b8; }
-        .dialogue-line { display: block; margin-bottom: 6px; line-height: 1.6; }
-        .speaker-label { font-weight: 800; color: #1e293b; margin-right: 6px; display: inline-block; font-size: 1.2rem; }
-        .translation-container { margin-top: 30px; padding-top: 25px; border-top: 2px dashed #e2e8f0; display: flex; flex-direction: column; gap: 12px; }
-        .translation-line { font-style: normal; color: #334155; font-size: 1.1rem; line-height: 1.5; white-space: pre-line; }
-    </style>
-</head>
-<body>
-<div class="app-container">
-    <h1>🎧 HSK Karaoke</h1>
-    <div class="sub">✨ Aplicación para practicar el 听力.</div>
-
-    <div class="select-group">
-        <div class="selector-row">
-            <label>Nivel</label>
-            <select id="levelSelect" style="width: 40%;"><option value="">Selecciona...</option></select>
-            <label style="width: auto; font-weight: normal; cursor: pointer;"><input type="checkbox" id="playAllLevelCheck" style="margin-right: 4px;"> Todo el nivel</label>
-            <button id="playLoopLevelBtn" style="display: none; background: #10b981; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer;" title="Bucle nivel">🔄</button>
-            <button id="playRandomLevelBtn" style="display: none; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer;" title="Aleatorio nivel">🔀</button>
-        </div>
-        <div class="selector-row">
-            <label>📖 Lección</label>
-            <select id="lessonSelect" style="width: 40%;"><option value="">--</option></select>
-            <label style="width: auto; font-weight: normal; cursor: pointer;"><input type="checkbox" id="playAllLessonCheck" style="margin-right: 4px;"> Toda la lección</label>
-            <button id="playLoopLessonBtn" style="display: none; background: #10b981; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer;" title="Bucle lección">🔄</button>
-            <button id="playRandomLessonBtn" style="display: none; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer;" title="Aleatorio lección">🔀</button>
-        </div>
-        <div class="selector-row">
-            <label>🎙️ Audio</label>
-            <select id="audioSelect" style="flex: 1;"><option value="">--</option></select>
-            <button id="loadAudioBtn" class="btn-load" style="flex: 0.6; padding: 10px; font-size: 0.9rem;">▶️ Cargar</button>
-        </div>
-        
-        <div class="selector-row" style="flex-wrap: wrap; gap: 6px;">
-            <button id="toggleTranslationBtn" class="btn-trans" style="flex: 1; min-width: 120px;">📖 Mostrar traducción</button>
-            <button id="togglePinyinBtn" class="btn-trans" style="flex: 1; min-width: 120px;">🔤 Mostrar pinyin</button>
-        </div>
-
-        <div class="editor-sync-row">
-            <button id="showEditorBtn" class="btn-editor">📝 Edición avanzada</button>
-            <button id="syncFixBtn" class="btn-sync-fix">⚡ Sincronizar</button>
-        </div>
-    </div>
-
-    <div class="status-bar" id="audioInfo">📌 Estado: Cargando audios...</div>
-
-    <div class="player-card">
-        <audio id="audioPlayer" controls style="width:100%; border-radius: 40px; margin-bottom: 15px;"></audio>
-        <div class="transcript-area" id="transcriptContainer"></div>
-    </div>
-    
-    <footer>💾 Sus ediciones sobreescriben los datos originales de forma permanente.</footer>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HSK Karaoke</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#f0f4f8;padding:20px 16px 32px;color:#1e293b}
+.app{max-width:700px;margin:0 auto;background:#fff;border-radius:36px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:20px 20px 30px}
+h1{font-size:1.8rem;text-align:center;margin-bottom:10px;color:#9a3412}
+.sub{color:#5b6e8c;font-size:.8rem;margin-bottom:20px;border-left:3px solid #f97316;padding-left:12px}
+.box{background:#f8fafc;border-radius:24px;padding:16px}
+.r{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.r label.t{font-weight:600;width:80px;color:#334155}
+.r label.c{cursor:pointer;font-size:.95rem}
+select{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:12px;font-size:1rem;color:#1e293b}
+button{border:0;border-radius:8px;padding:14px;font-weight:700;cursor:pointer;font-size:.9rem}
+button:active{opacity:.8;transform:scale(.98)}
+.go{background:#f97316;color:#fff}.tr{background:#fff7ed;color:#f97316;border:1px solid #ffedd5;font-weight:600}
+.tr.active{background:#ffedd5;border-color:#f97316}
+.ed{background:#a855f7;color:#fff}.sy{background:#ef4444;color:#fff}
+.st{background:#f1f5f9;border-radius:8px;padding:12px;margin:20px 0;border-left:4px solid #1e293b;font-size:.9rem;color:#475569}
+audio{width:100%;margin-bottom:15px}
+#transcriptContainer{background:#fefce8;border-radius:24px;padding:20px 16px;min-height:200px;border:2px solid #fde68a}
+.line{margin-bottom:8px;line-height:1.9}
+.spk{font-weight:800;margin-right:6px;font-size:1.2rem}
+.w{display:inline-block;border-radius:10px;padding:2px 3px;margin:0 1px;font-size:1.2rem;cursor:pointer}
+.w.active{background:#fbbf24;font-weight:600}
+.msg{text-align:center;color:#94a3b8;padding:20px}
+.x{margin-top:24px;padding-top:18px;border-top:2px dashed #e2e8f0;display:flex;flex-direction:column;gap:10px;font-size:1.05rem;line-height:1.5;color:#334155}
+.x.py{border-top-color:#a78bfa;color:#6b21a5}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal .b{background:#fff;border-radius:28px;max-width:550px;width:100%;padding:24px;max-height:95vh;overflow:auto}
+.modal textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #cbd5e1;font-family:monospace;margin-bottom:8px}
+.lab{font-size:.8rem;color:#64748b;margin:6px 0 2px}
+footer{font-size:.7rem;text-align:center;margin-top:20px;color:#94a3b8}
+</style></head><body>
+<div class="app">
+<h1>🎧 HSK Karaoke</h1>
+<div class="sub">✨ Aplicación para practicar el 听力.</div>
+<div class="box">
+ <div class="r"><label class="t">Nivel</label><select id="levelSelect" style="width:40%"></select>
+  <label class="c"><input type="checkbox" id="chkLevel"> Todo el nivel</label></div>
+ <div class="r"><label class="t">📖 Lección</label><select id="lessonSelect" style="width:40%"></select>
+  <label class="c"><input type="checkbox" id="chkLesson"> Toda la lección</label></div>
+ <div class="r" id="modeRow" style="display:none"><label class="t"></label>
+  <button id="btnLoop" style="background:#10b981;color:#fff;opacity:.45;padding:8px 12px">🔄 Bucle</button>
+  <button id="btnRnd" style="background:#2563eb;color:#fff;opacity:.45;padding:8px 12px">🔀 Aleatorio</button></div>
+ <div class="r"><label class="t">🎙️ Audio</label><select id="audioSelect" style="flex:1"></select>
+  <button id="btnLoad" class="go">▶️ Cargar</button></div>
+ <div class="r"><button id="btnTr" class="tr" style="flex:1">📖 Mostrar traducción</button>
+  <button id="btnPy" class="tr" style="flex:1">🔤 Mostrar pinyin</button></div>
+ <div class="r" style="margin:0"><button id="btnEd" class="ed" style="flex:2">📝 Edición avanzada</button>
+  <button id="btnSy" class="sy" style="flex:1">⚡ Sincronizar</button></div>
 </div>
-
+<div class="st" id="info">📌 Estado: cargando diálogos…</div>
+<audio id="audioPlayer" controls></audio>
+<div id="transcriptContainer"><div class="msg">🎤 Elige un audio y pulsa «Cargar».</div></div>
+<footer>💾 Las ediciones se guardan solo en este navegador. Los textos originales están en dialogos.json.</footer>
+</div>
 <script>
-const HSK_DATA = {
-"1_2_1": { "zh": "女: 你好\n男: 你好", "es": "Mujer: Hola\nHombre: Hola", "pinyin": "nǚ: nǐ hǎo\nnán: nǐ hǎo" },
-"1_2_2": { "zh": "女: 您好\n男: 你们 好", "es": "Mujer: Hola (formal)\nHombre: Hola a vosotros", "pinyin": "nǚ: nín hǎo\nnán: nǐ men hǎo" },
-"1_2_3": { "zh": "男: 再见\n女: 再见", "es": "Hombre: Adiós\nMujer: Adiós", "pinyin": "nán: zài jiàn\nnǚ: zài jiàn" },
-"1_2_4": { "zh": "女: 谢谢 你\n男: 不客气", "es": "Mujer: Gracias\nHombre: De nada", "pinyin": "nǚ: xiè xiè nǐ\nnán: bù kè qì" },
-"1_2_5": { "zh": "男: 对不起\n女: 没关系", "es": "Hombre: Lo siento\nMujer: No pasa nada", "pinyin": "nán: duì bù qǐ\nnǚ: méi guān xì" },
-"1_3_1": { "zh": "女: 你 叫什么 名字?\n男: 我 叫 李月。", "es": "Mujer: ¿Cómo te llamas?\nHombre: Me llamo Li Yue.", "pinyin": "nǚ: nǐ jiào shén me míng zi?\nnán: wǒ jiào lǐ yuè." },
-"1_3_2": { "zh": "男: 你 是 老师 吗?\n女: 我 不是 老师, 我 是 学生。", "es": "Hombre: ¿Eres profesor?\nMujer: No soy profesora, soy estudiante.", "pinyin": "nán: nǐ shì lǎo shī ma?\nnǚ: wǒ bú shì lǎo shī, wǒ shì xué shēng." },
-"1_3_3": { "zh": "女: 你 是 中国人 吗?\n男: 我 不是 中国人, 我 是 美国人。", "es": "Mujer: ¿Eres chino?\nHombre: No soy chino, soy estadounidense.", "pinyin": "nǚ: nǐ shì zhōng guó rén ma?\nnán: wǒ bú shì zhōng guó rén, wǒ shì měi guó rén." },
-"1_3_4": { "zh": "男: 你 是 哪 国 人?\n女: 我 是 美国人, 你 呢?\n男: 我 是 中国人。", "es": "Hombre: ¿De qué país eres?\nMujer: Soy estadounidense, ¿y tú?\nHombre: Soy chino.", "pinyin": "nán: nǐ shì nǎ guó rén?\nnǚ: wǒ shì měi guó rén, nǐ ne?\nnán: wǒ shì zhōng guó rén." },
-"1_4_1": { "zh": "女: 你好。\n男: 你好。\n女: 你好 吗?\n男: 我 很好, 你 呢?\n女: 我 也 很好, 谢谢!", "es": "Mujer: Hola.\nHombre: Hola.\nMujer: ¿Qué tal estás?\nHombre: Estoy muy bien, ¿y tú?\nMujer: Yo también estoy muy bien, ¡gracias!", "pinyin": "nǚ: nǐ hǎo.\nnán: nǐ hǎo.\nnǚ: nǐ hǎo ma?\nnán: wǒ hěn hǎo, nǐ ne?\nnǚ: wǒ yě hěn hǎo, xiè xiè!" },
-"1_4_2": { "zh": "女: 你好。\n男: 你好! 很 高兴 认识 你。\n女: 我 也 很 高兴。", "es": "Mujer: Hola.\nHombre: ¡Hola! Encantado de conocerte.\nMujer: El placer es mío.", "pinyin": "nǚ: nǐ hǎo.\nnán: nǐ hǎo! hěn gāo xìng rèn shi nǐ.\nnǚ: wǒ yě hěn gāo xìng." },
-"1_4_3": { "zh": "女: 她 是 谁?\n男: 她 是 我的 汉语 老师, 她 叫 李月。", "es": "Mujer: ¿Quién es ella?\nHombre: Es mi profesora de chino, se llama Li Yue.", "pinyin": "nǚ: tā shì shuí?\nnán: tā shì wǒ de hàn yǔ lǎo shī, tā jiào lǐ yuè." },
-"1_4_4": { "zh": "女: 他 是 谁?\n男: 他 是 我 同学。\n女: 她 呢? 她 是 你 同学 吗?\n男: 她 不是 我 同学, 她 是 我 朋友。", "es": "Mujer: ¿Quién es él?\nHombre: Es mi compañero de estudios.\nMujer: ¿Y ella? ¿Es tu compañera de estudios?\nHombre: No es mi compañera de estudios, es mi amiga.", "pinyin": "nǚ: tā shì shuí?\nnán: tā shì wǒ tóng xué.\nnǚ: tā ne? tā shì nǐ tóng xué ma?\nnán: tā bú shì wǒ tóng xué, tā shì wǒ péng you." },
-"1_4_5": { "zh": "女: 这是 你 爸爸、妈妈 吗?\n男: 对, 这是 我 爸爸, 这是 我 妈妈。\n女: 你 爸爸 在 哪儿 工作?\n男: 他 在 医院 工作. 他 是 医生。\n女: 你 妈妈 呢?\n男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?\nHombre: Sí, este es mi padre, esta es mi madre.\nMujer: ¿Dónde trabaja tu padre?\nHombre: Él trabaja en el hospital. Es médico.\nMujer: ¿Y tu madre?\nHombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?\nnán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.\nnǚ: nǐ bà ba zài nǎ ér gōng zuò?\nnán: tā zài yī yuàn gōng zuò. tā shì yī shēng.\nnǚ: nǐ mā ma ne?\nnán: tā bù gōng zuò." },
-"1_5_1": { "zh": "女: 这是 谁?\n男: 这是 我 爸爸。\n女: 那 是 谁?\n男: 那 是 我 妈妈。", "es": "Mujer: ¿Quién es este?\nHombre: Este es mi padre.\nMujer: ¿Quién es aquella?\nHombre: Aquella es mi madre.", "pinyin": "nǚ: zhè shì shuí?\nnán: zhè shì wǒ bà ba.\nnǚ: nà shì shuí?\nnán: nà shì wǒ mā ma." },
-"1_5_2": { "zh": "女: 这是 你 爸爸、妈妈 吗？\n男: 对，这是 我 爸爸，这是 我 妈妈。\n女: 你 爸爸 在 哪儿 工作？\n男: 他 在 医院 工作。他 是 医生。\n女: 你 妈妈 呢？\n男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?\nHombre: Sí, este es mi padre, esta es mi madre.\nMujer: ¿Dónde trabaja tu padre?\nHombre: Él trabaja en el hospital. Es médico.\nMujer: ¿Y tu madre?\nHombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?\nnán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.\nnǚ: nǐ bà ba zài nǎ ér gōng zuò?\nnán: tā zài yī yuàn gōng zuò. tā shì yī shēng.\nnǚ: nǐ mā ma ne?\nnán: tā bù gōng zuò." },
-"1_5_3": { "zh": "女: 小猫 在 哪儿?\n男: 小猫 在 那儿。\n女: 小狗 在 哪儿?\n男: 小狗 在 椅子 下面。", "es": "Mujer: ¿Dónde está el gatito?\nHombre: El gatito está allí.\nMujer: ¿Dónde está el perrito?\nHombre: El perrito está debajo de la silla.", "pinyin": "nǚ: xiǎo māo zài nǎ ér?\nnán: xiǎo māo zài nà ér.\nnǚ: xiǎo gǒu zài nǎ ér?\nnán: xiǎo gǒu zài yǐ zi xià miàn." },
-"1_5_4": { "zh": "女: 你 在 哪儿 工作?\n男: 我 在 学校 工作。\n女: 你 儿子 在 哪儿 工作?\n男: 我 儿子 在 医院 工作, 他 是 医生。", "es": "Mujer: ¿Dónde trabajas?\nHombre: Trabajo en la escuela.\nMujer: ¿Dónde trabaja tu hijo?\nHombre: Mi hijo trabaja en el hospital, es médico.", "pinyin": "nǚ: nǐ zài nǎ ér gōng zuò?\nnán: wǒ zài xué xiào gōng zuò.\nnǚ: nǐ ér zi zài nǎ ér gōng zuò?\nnán: wǒ ér zi zài yī yuàn gōng zuò, tā shì yī shēng." },
-"1_5_5": { "zh": "女: 这儿 有 人 吗?\n男: 没有。\n女: 我 能 坐 这儿 吗?\n男: 请坐。", "es": "Mujer: ¿Aquí hay alguien?\nHombre: No hay.\nMujer: ¿Me puedo sentar aquí?\nHombre: Por favor, siéntate.", "pinyin": "nǚ: zhè ér yǒu rén ma?\nnán: méi yǒu.\nnǚ: wǒ néng zuò zhè ér ma?\nnán: qǐng zuò." },
-"1_6_1": { "zh": "女: 你 想 喝 什么?\n男: 我 想 喝 茶。\n女: 你 想 吃 什么?\n男: 我 想 吃 米饭。", "es": "Mujer: ¿Qué quieres beber?\nHombre: Quiero beber té.\nMujer: ¿Qué quieres comer?\nHombre: Quiero comer arroz.", "pinyin": "nǚ: nǐ xiǎng hē shén me?\nnán: wǒ xiǎng hē chá.\nnǚ: nǐ xiǎng chī shén me?\nnán: wǒ xiǎng chī mǐ fàn." },
-"1_6_2": { "zh": "男: 下午 你 想 做 什么?\n女: 下午 我 想 去 商店。\n男: 你 想 买 什么?\n女: 我 想 买 一个 杯子。", "es": "Hombre: ¿Qué quieres hacer por la tarde?\nMujer: Por la tarde quiero ir a la tienda.\nHombre: ¿Qué quieres comprar?\nMujer: Quiero comprar un vaso.", "pinyin": "nán: xià wǔ nǐ xiǎng zuò shén me?\nnǚ: xià wǔ wǒ xiǎng qù shāng diàn.\nnán: nǐ xiǎng mǎi shén me?\nnǚ: wǒ xiǎng mǎi yí gè bēi zi." },
-"1_6_3": { "zh": "女: 你好! 这个 杯子 多少 钱?\n男: 二十八 块。\n女: 那个 杯子 多少 钱?\n男: 那个 杯子 十八 块钱。", "es": "Mujer: ¡Hola! ¿Cuánto cuesta este vaso?\nHombre: Veintiocho yuanes.\nMujer: ¿Cuánto cuesta aquel vaso?\nHombre: Aquel vaso cuesta dieciocho yuanes.", "pinyin": "nǚ: nǐ hǎo! zhè ge bēi zi duō shao qián?\nnán: èr shí bā kuài.\nnǚ: nà ge bēi zi duō shao qián?\nnán: nà ge bēi zi shí bā kuài qián." }
-};
+(()=>{
+const $=id=>document.getElementById(id), A=$('audioPlayer'), LS='hsk_edits_v3';
+let ok=false;try{ok=btoa(prompt('Introduce la contraseña para acceder al Karaoke:')||'')==='YXVkaW9z'}catch(e){}
+if(!ok){document.body.innerHTML='<h1>Acceso denegado</h1>';return}
 
-let AUDIOS_DETECTADOS = [];
-let transcripcionesDB = {}; 
-let currentTokens = [], currentTranslation = "", currentPinyin = "", currentFilename = "", showTranslation = false, showPinyin = false, activeRAF = null;
+let DB={},IDS=[],cur='',tokens=[],els=[],act=-1,raf=0,showTr=false,showPy=false,loop=false,rnd=false,ED={};
+try{ED=JSON.parse(localStorage.getItem(LS))||{}}catch(e){}
+const save=()=>{try{localStorage.setItem(LS,JSON.stringify(ED))}catch(e){}};
+const get=id=>Object.assign({zh:'',es:'',pinyin:''},DB[id],ED[id]);
+const info=t=>$('info').textContent=t;
+const cmp=(a,b)=>{const x=a.split('_').map(Number),y=b.split('_').map(Number);for(let i=0;i<3;i++)if((x[i]||0)!==(y[i]||0))return(x[i]||0)-(y[i]||0);return 0};
+const opt=(v,t)=>`<option value="${v}">${t}</option>`;
 
-const levelSelect = document.getElementById('levelSelect');
-const lessonSelect = document.getElementById('lessonSelect');
-const audioSelect = document.getElementById('audioSelect');
-const audioPlayer = document.getElementById('audioPlayer');
-const transcriptContainer = document.getElementById('transcriptContainer');
-const audioInfoSpan = document.getElementById('audioInfo');
-const toggleTranslationBtn = document.getElementById('toggleTranslationBtn');
-const togglePinyinBtn = document.getElementById('togglePinyinBtn');
-const syncFixBtn = document.getElementById('syncFixBtn');
+function fillLevels(){$('levelSelect').innerHTML=[...new Set(IDS.map(i=>i.split('_')[0]))].map(n=>opt(n,'HSK '+n)).join('');fillLessons()}
+function fillLessons(){const n=$('levelSelect').value;
+ $('lessonSelect').innerHTML=[...new Set(IDS.filter(i=>i.startsWith(n+'_')).map(i=>i.split('_')[1]))].map(l=>opt(l,'Lección '+l)).join('');fillAudios()}
+function fillAudios(){const p=$('levelSelect').value+'_'+$('lessonSelect').value+'_';
+ $('audioSelect').innerHTML=IDS.filter(i=>i.startsWith(p)).map(i=>opt(i,'Diálogo '+i.split('_')[2]+' ('+i+'.mp3)'+(get(i).zh?'':' · sin texto'))).join('')}
+function goTo(id,play){const[n,l]=id.split('_');$('levelSelect').value=n;fillLessons();$('lessonSelect').value=l;fillAudios();$('audioSelect').value=id;load(id,play)}
 
-function cargarTranscripcionesGuardadas() {
-    const guardado = localStorage.getItem('hsk_karaoke_persistente_v2');
-    if (guardado) {
-        try { transcripcionesDB = JSON.parse(guardado); } catch(e) { transcripcionesDB = {}; }
-    }
-}
+function parse(zh){
+ return zh.split(/\n+/).map(s=>s.trim()).filter(Boolean).map(l=>{
+  const m=l.match(/^([A-Za-z男女\d]{1,3})\s*[:：]\s*(.*)$/),txt=m?m[2]:l;
+  let w=txt.split(/\s+/).filter(Boolean);if(w.length===1&&w[0].length>4)w=Array.from(w[0]);
+  return{spk:m?m[1]:'',w}})}
+function render(){
+ const d=get(cur),T=$('transcriptContainer');T.textContent='';tokens=[];els=[];act=-1;
+ $('btnTr').style.display=d.es?'':'none';$('btnPy').style.display=d.pinyin?'':'none';
+ if(!d.zh){const m=document.createElement('div');m.className='msg';
+  m.append('📝 Este audio no tiene transcripción.',document.createElement('br'),'Pulsa «Edición avanzada» para añadirla.');T.append(m);return}
+ parse(d.zh).forEach(L=>{const row=document.createElement('div');row.className='line';
+  if(L.spk){const s=document.createElement('span');s.className='spk';s.textContent=L.spk+'：';row.append(s)}
+  L.w.forEach(w=>{const s=document.createElement('span');s.className='w';s.textContent=w;const i=tokens.length;
+   s.onclick=()=>{if(isFinite(A.duration)){A.currentTime=tokens[i].s;tick()}};
+   tokens.push({w:Math.max(1,w.length)});els.push(s);row.append(s,' ')});
+  T.append(row)});
+ const ex=document.createElement('div');ex.id='extra';T.append(ex);extras();retime(A.duration)}
+function extras(){const ex=$('extra');if(!ex)return;const d=get(cur);ex.textContent='';
+ [[showTr,d.es,'x'],[showPy,d.pinyin,'x py']].forEach(([on,t,c])=>{if(!on||!t)return;
+  const b=document.createElement('div');b.className=c;t.split('\n').filter(s=>s.trim()).forEach(l=>{const p=document.createElement('div');p.textContent=l;b.append(p)});ex.append(b)})}
+function retime(dur){dur=isFinite(dur)&&dur>0?dur:8;const st=.3,span=Math.max(1,dur-.8),W=tokens.reduce((a,t)=>a+t.w,0)||1;let c=0;
+ tokens.forEach(t=>{t.s=st+span*c/W;c+=t.w;t.e=st+span*c/W})}
+function tick(){const t=A.currentTime;let k=-1;
+ for(let i=0;i<tokens.length;i++)if(t>=tokens[i].s&&t<tokens[i].e){k=i;break}
+ if(k!==act){if(els[act])els[act].classList.remove('active');if(els[k])els[k].classList.add('active');act=k}
+ if(!A.paused&&!A.ended)raf=requestAnimationFrame(tick)}
 
-function guardarTranscripciones() {
-    localStorage.setItem('hsk_karaoke_persistente_v2', JSON.stringify(transcripcionesDB));
-}
+function load(id,play){
+ if(!id||!DB[id])return;cur=id;cancelAnimationFrame(raf);A.pause();
+ info('🎵 Cargado: '+id+'.mp3');A.src='audios/'+id+'.mp3';render();
+ if(play)A.play().catch(()=>{})}
+function multi(){return $('chkLevel').checked||$('chkLesson').checked}
+function scope(){const[n,l]=cur.split('_');
+ if($('chkLevel').checked)return IDS.filter(i=>i.startsWith(n+'_'));
+ if($('chkLesson').checked)return IDS.filter(i=>i.startsWith(n+'_'+l+'_'));return[cur]}
+function next(){if(!cur||!multi())return;const s=scope();let n;
+ if(rnd&&s.length>1){do{n=s[Math.random()*s.length|0]}while(n===cur)}
+ else{const k=s.indexOf(cur)+1;n=k<s.length?s[k]:loop?s[0]:null}
+ if(n&&n!==cur)goTo(n,true);else if(n===cur){A.currentTime=0;A.play()}}
+A.onended=next;
+A.onerror=()=>{info('⚠️ No se encuentra audios/'+cur+'.mp3');if(multi()&&scope().length>1)setTimeout(next,800)};
+A.onloadedmetadata=()=>retime(A.duration);
+A.onplay=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)};
+A.onseeked=tick;
 
-const AUDIO_FILES = [
-"1_2_1.mp3","1_2_2.mp3","1_2_3.mp3","1_2_4.mp3","1_2_5.mp3",
-"1_3_1.mp3","1_3_2.mp3","1_3_3.mp3","1_3_4.mp3",
-"1_4_3.mp3","1_4_4.mp3","1_4_5.mp3",
-"1_5_1.mp3","1_5_3.mp3","1_5_4.mp3","1_5_5.mp3",
-"1_6_1.mp3","1_6_2.mp3","1_6_3.mp3",
-"1_7_1.mp3","1_7_2.mp3","1_7_3.mp3","1_7_4.mp3",
-"1_8_1.mp3","1_8_2.mp3","1_8_3.mp3","1_8_4.mp3",
-"1_9_1.mp3","1_9_2.mp3","1_9_3.mp3",
-"1_10_1.mp3","1_10_2.mp3","1_10_3.mp3","1_10_4.mp3","1_10_5.mp3","1_10_6.mp3","1_10_7.mp3",
-"2_1_1.mp3","2_1_2.mp3","2_1_3.mp3","2_1_4.mp3",
-"2_2_1.mp3","2_2_2.mp3","2_2_3.mp3","2_2_4.mp3",
-"2_3_1.mp3","2_3_2.mp3","2_3_3.mp3","2_3_4.mp3",
-"2_4_1.mp3","2_4_2.mp3","2_4_3.mp3","2_4_4.mp3",
-"2_5_1.mp3","2_5_2.mp3","2_5_3.mp3","2_5_4.mp3","2_5_5.mp3","2_5_6.mp3","2_5_7.mp3",
-"2_6_1.mp3","2_6_2.mp3","2_6_3.mp3","2_6_4.mp3","2_6_5.mp3","2_6_6.mp3",
-"3_1_1.mp3","3_1_2.mp3","3_1_3.mp3","3_1_4.mp3","3_1_5.mp3",
-"3_2_1.mp3","3_2_2.mp3","3_2_3.mp3","3_2_4.mp3","3_2_5.mp3","3_2_6.mp3","3_2_7.mp3",
-"3_3_1.mp3","3_3_2.mp3","3_3_3.mp3","3_3_4.mp3","3_3_5.mp3","3_3_6.mp3","3_3_7.mp3",
-"3_4_1.mp3","3_4_2.mp3","3_4_3.mp3","3_4_4.mp3","3_4_5.mp3","3_4_6.mp3","3_4_7.mp3",
-"3_5_1.mp3","3_5_2.mp3","3_5_3.mp3","3_5_4.mp3","3_5_5.mp3",
-"3_6_1.mp3","3_6_2.mp3","3_6_3.mp3","3_6_4.mp3","3_6_5.mp3","3_6_6.mp3","3_6_7.mp3","3_6_8.mp3","3_6_9.mp3","3_6_10.mp3",
-"3_7_1.mp3","3_7_2.mp3","3_7_3.mp3","3_7_4.mp3","3_7_5.mp3","3_7_6.mp3","3_7_7.mp3","3_7_8.mp3","3_7_9.mp3",
-"3_8_1.mp3","3_8_2.mp3","3_8_3.mp3","3_8_4.mp3","3_8_5.mp3","3_8_6.mp3","3_8_7.mp3","3_8_8.mp3","3_8_9.mp3","3_8_10.mp3",
-"3_9_1.mp3","3_9_2.mp3","3_9_3.mp3","3_9_4.mp3","3_9_5.mp3","3_9_6.mp3","3_9_7.mp3","3_9_8.mp3","3_9_9.mp3",
-"4_1_1.mp3","4_1_2.mp3","4_1_3.mp3",
-"4_2_1.mp3","4_2_2.mp3","4_2_3.mp3",
-"4_3_1.mp3","4_3_2.mp3","4_3_3.mp3","4_3_4.mp3","4_3_5.mp3",
-"4_4_1.mp3","4_4_2.mp3","4_4_3.mp3","4_4_4.mp3","4_4_5.mp3","4_4_6.mp3",
-"4_5_1.mp3","4_5_2.mp3","4_5_3.mp3","4_5_4.mp3","4_5_5.mp3",
-"4_6_1.mp3","4_6_2.mp3","4_6_3.mp3","4_6_4.mp3","4_6_5.mp3","4_6_6.mp3","4_6_7.mp3",
-"4_7_1.mp3","4_7_2.mp3","4_7_3.mp3",
-"4_8_1.mp3","4_8_2.mp3","4_8_3.mp3","4_8_4.mp3",
-"4_9_1.mp3","4_9_2.mp3","4_9_3.mp3","4_9_4.mp3",
-"4_10_1.mp3","4_10_2.mp3","4_10_3.mp3","4_10_4.mp3","4_10_5.mp3",
-"4_11_1.mp3","4_11_2.mp3","4_11_3.mp3","4_11_4.mp3","4_11_5.mp3","4_11_6.mp3","4_11_7.mp3",
-"4_12_1.mp3","4_12_2.mp3","4_12_3.mp3","4_12_4.mp3",
-"4_13_1.mp3","4_13_2.mp3","4_13_3.mp3","4_13_4.mp3","4_13_5.mp3","4_13_6.mp3","4_13_7.mp3","4_13_8.mp3"
-];
+function editor(){
+ if(!cur)return alert('Carga un audio primero');
+ const d=get(cur),mk=(t,v,r)=>{const e=document.createElement('textarea');e.rows=r;e.value=v;return e},
+  lab=t=>{const e=document.createElement('div');e.className='lab';e.textContent=t;return e},
+  z=mk(0,d.zh,6),p=mk(0,d.pinyin,3),e=mk(0,d.es,5),m=document.createElement('div'),b=document.createElement('div'),h=document.createElement('h3'),row=document.createElement('div');
+ m.className='modal';b.className='b';h.textContent='✏️ '+cur;row.style.cssText='display:flex;gap:8px;margin-top:10px';
+ const bt=(t,bg,f)=>{const x=document.createElement('button');x.textContent=t;x.style.cssText='flex:1;color:#fff;background:'+bg;x.onclick=f;return x},
+  close=()=>m.remove();
+ row.append(bt('💾 Guardar','#22c55e',()=>{ED[cur]={zh:z.value.trim(),pinyin:p.value.trim(),es:e.value.trim()};save();close();load(cur)}),
+  bt('↺ Original','#f59e0b',()=>{delete ED[cur];save();close();load(cur)}),bt('Cancelar','#94a3b8',close));
+ b.append(h,lab('Chino (una línea por intervención, palabras separadas por espacios)'),z,lab('Pinyin'),p,lab('Traducción'),e,row);m.append(b);document.body.append(m)}
 
-async function inicializarAudios() {
-    let lista = AUDIO_FILES; 
-    try {
-        const resp = await fetch('audios/manifest.json', { cache: 'no-store' });
-        if (resp.ok) {
-            const datos = await resp.json();
-            if (Array.isArray(datos) && datos.length > 0) lista = datos;
-        }
-    } catch (e) {}
-    AUDIOS_DETECTADOS = lista.map(nombre => {
-        const sinExtension = nombre.replace(/\.[a-zA-Z0-9]+$/, '');
-        const partes = sinExtension.split('_');
-        return {
-            filename: nombre,
-            nivel: partes[0] || "1",
-            leccion: partes[1] || "1",
-            dialogo: partes[2] || "1",
-            remoteUrl: 'audios/' + encodeURIComponent(nombre)
-        };
-    });
-    if (AUDIOS_DETECTADOS.length > 0) {
-        actualizarNiveles();
-        audioInfoSpan.innerHTML = `✅ Estado: ${AUDIOS_DETECTADOS.length} audios cargados.`;
-    }
-}
+$('levelSelect').onchange=fillLessons;$('lessonSelect').onchange=fillAudios;
+$('btnLoad').onclick=()=>load($('audioSelect').value);
+$('btnEd').onclick=editor;$('btnSy').onclick=()=>{retime(A.duration);tick()};
+$('btnTr').onclick=()=>{showTr=!showTr;$('btnTr').classList.toggle('active',showTr);extras()};
+$('btnPy').onclick=()=>{showPy=!showPy;$('btnPy').classList.toggle('active',showPy);extras()};
+const mode=()=>$('modeRow').style.display=multi()?'':'none';
+$('chkLevel').onchange=()=>{if($('chkLevel').checked)$('chkLesson').checked=false;mode()};
+$('chkLesson').onchange=()=>{if($('chkLesson').checked)$('chkLevel').checked=false;mode()};
+$('btnLoop').onclick=()=>{loop=!loop;$('btnLoop').style.opacity=loop?1:.45};
+$('btnRnd').onclick=()=>{rnd=!rnd;$('btnRnd').style.opacity=rnd?1:.45};
 
-function actualizarNiveles() {
-    const niveles = [...new Set(AUDIOS_DETECTADOS.map(a => a.nivel))].sort((a,b) => a-b);
-    levelSelect.innerHTML = niveles.map(n => `<option value="${n}">HSK ${n}</option>`).join('');
-    actualizarLecciones();
-}
-
-function actualizarLecciones() {
-    const nivelSel = levelSelect.value;
-    const lecciones = [...new Set(AUDIOS_DETECTADOS.filter(a => a.nivel === nivelSel).map(a => a.leccion))].sort((a,b) => a-b);
-    lessonSelect.innerHTML = lecciones.map(l => `<option value="${l}">Lección ${l}</option>`).join('');
-    updateAudioSelector();
-}
-
-function updateAudioSelector() {
-    const n = levelSelect.value;
-    const l = lessonSelect.value;
-    const filtrados = AUDIOS_DETECTADOS.filter(a => a.nivel === n && a.leccion === l);
-    audioSelect.innerHTML = filtrados.map(a => `<option value="${a.filename}">Diálogo ${a.dialogo} (${a.filename})</option>`).join('');
-}
-
-function loadSelectedAudio() {
-    currentFilename = audioSelect.value;
-    if (!currentFilename) return;
-    const meta = AUDIOS_DETECTADOS.find(a => a.filename === currentFilename);
-    if (!meta) return;
-
-    if (activeRAF) cancelAnimationFrame(activeRAF);
-    audioPlayer.pause();
-    audioPlayer.src = meta.remoteUrl;
-    
-    audioPlayer.onloadedmetadata = () => {
-        const durReal = audioPlayer.duration;
-        const idBusqueda = `${meta.nivel}_${meta.leccion}_${meta.dialogo}`;
-        let data;
-        if (transcripcionesDB[currentFilename]) {
-            data = transcripcionesDB[currentFilename];
-        } else if (HSK_DATA[idBusqueda]) {
-            data = { chinoRaw: HSK_DATA[idBusqueda].zh.replace(/\n/g, ' '), traduccion: HSK_DATA[idBusqueda].es, pinyin: HSK_DATA[idBusqueda].pinyin || '', timings: [], duracion: durReal };
-        } else {
-            data = { chinoRaw: "Texto sin transcripción", traduccion: "", pinyin: "", timings: [], duracion: durReal };
-        }
-        currentTokens = buildTokensFromRaw(data.chinoRaw, data.timings, durReal);
-        currentTranslation = data.traduccion;
-        currentPinyin = data.pinyin || '';
-        audioInfoSpan.innerHTML = `🎵 Cargado: ${currentFilename}`;
-        renderTranscript();
-    };
-}
-
-function buildTokensFromRaw(rawText, timingsArray, totalDur) {
-    if (!rawText) return [];
-    const words = rawText.split(/\s+/).filter(w => w.length > 0);
-    const tokens = [];
-    
-    const speechStart = 0.3;
-    const speechEnd = Math.max(speechStart + 0.5, totalDur - 0.8);
-    const speechDuration = speechEnd - speechStart;
-
-    for (let i = 0; i < words.length; i++) {
-        let start = speechStart + (i * (speechDuration / words.length));
-        let end = speechStart + ((i + 1) * (speechDuration / words.length));
-        tokens.push({ word: words[i], start: parseFloat(start), end: parseFloat(end) });
-    }
-    return tokens;
-}
-
-function renderTranscript() {
-    if (!currentTokens || currentTokens.length === 0) {
-        transcriptContainer.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:20px;">🎤 Haz clic en "Cargar audio" para empezar.</div>`;
-        return;
-    }
-    let html = `<div id="karaokeContainer">`;
-    let currentLineHtml = '<div class="dialogue-line">';
-    const speakers = ['男', '女', 'A', 'B', '男1', '男2', '女1', '女2'];
-    currentTokens.forEach((token, idx) => {
-        const cleanWord = token.word.replace(/[:：]/g, '').trim();
-        const isSpeaker = speakers.includes(cleanWord);
-        if (isSpeaker && idx > 0) currentLineHtml += '</div><div class="dialogue-line">';
-        const className = (isSpeaker || token.word.includes(':')) ? 'speaker-label' : 'karaoke-word';
-        currentLineHtml += `<span class="${className}" id="w-${idx}">${escapeHtml(token.word)}</span> `;
-    });
-    currentLineHtml += '</div>';
-    html += currentLineHtml + '</div>';
-    if (showTranslation && currentTranslation) {
-        html += `<div class="translation-container">`;
-        currentTranslation.split('\n').forEach(line => {
-            if (line.trim()) html += `<div class="translation-line">${escapeHtml(line)}</div>`;
-        });
-        html += `</div>`;
-    }
-    if (showPinyin && currentPinyin) {
-        html += `<div class="translation-container" style="border-top-color: #a78bfa;">`;
-        currentPinyin.split('\n').forEach(line => {
-            if (line.trim()) html += `<div class="translation-line" style="color: #6b21a5;">${escapeHtml(line)}</div>`;
-        });
-        html += `</div>`;
-    }
-    transcriptContainer.innerHTML = html;
-}
-
-function startKaraokeSync() {
-    if (activeRAF) cancelAnimationFrame(activeRAF);
-    function sync() {
-        if (!audioPlayer.paused && !audioPlayer.ended) {
-            const time = audioPlayer.currentTime;
-            currentTokens.forEach((t, i) => {
-                const el = document.getElementById(`w-${i}`);
-                if (el) {
-                    if (time >= t.start && time < t.end) el.classList.add('active');
-                    else el.classList.remove('active');
-                }
-            });
-            activeRAF = requestAnimationFrame(sync);
-        }
-    }
-    activeRAF = requestAnimationFrame(sync);
-}
-
-function forceSync() {
-    if (!currentTokens.length || !audioPlayer.duration) return;
-    const dur = audioPlayer.duration;
-    const speechStart = 0.2;
-    const speechEnd = Math.max(speechStart + 0.5, dur - 0.5);
-    const speechDuration = speechEnd - speechStart;
-    const count = currentTokens.length;
-
-    currentTokens.forEach((t, i) => {
-        t.start = speechStart + (i * speechDuration) / count;
-        t.end = speechStart + ((i + 1) * speechDuration) / count;
-    });
-    
-    if (audioPlayer.paused) {
-        const time = audioPlayer.currentTime;
-        currentTokens.forEach((t, i) => {
-            const el = document.getElementById(`w-${i}`);
-            if (el) {
-                if (time >= t.start && time < t.end) el.classList.add('active');
-                else el.classList.remove('active');
-            }
-        });
-    }
-}
-
-function showAdvancedEditor() {
-    if (!currentFilename) return alert("Carga un audio primero");
-    const currentChino = currentTokens.map(t => t.word).join(' ');
-    const modalHtml = `
-        <div id="modalEditor" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;">
-            <div style="background:white;border-radius:28px;max-width:550px;width:100%;padding:24px;">
-                <h3 style="margin-bottom:15px">✏️ Editor de Persistencia</h3>
-                <textarea id="editChino" rows="5">${currentChino}</textarea>
-                <textarea id="editPinyin" rows="3" style="margin-top:10px;">${currentPinyin}</textarea>
-                <textarea id="editTrad" rows="4" style="margin-top:10px;">${currentTranslation}</textarea>
-                <div style="margin-top:20px; display:flex; gap:10px;">
-                    <button id="saveMdl" style="background:#22c55e; color:white; flex:1; border:none; padding:12px; border-radius:8px; cursor:pointer;">💾 Guardar</button>
-                    <button onclick="document.getElementById('modalEditor').remove()" style="background:#e2e8f0; flex:1; border:none; padding:12px; border-radius:8px; cursor:pointer;">Cancelar</button>
-                </div>
-            </div>
-        </div>`;
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    document.getElementById('saveMdl').onclick = () => {
-        const raw = document.getElementById('editChino').value.trim();
-        const trad = document.getElementById('editTrad').value.trim();
-        const pinyin = document.getElementById('editPinyin').value.trim();
-        const dur = audioPlayer.duration || 5;
-        transcripcionesDB[currentFilename] = { chinoRaw: raw, traduccion: trad, pinyin: pinyin, duracion: dur };
-        guardarTranscripciones();
-        document.getElementById('modalEditor').remove();
-        loadSelectedAudio();
-    };
-}
-
-function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
-function toggleTranslation() {
-    showTranslation = !showTranslation;
-    toggleTranslationBtn.classList.toggle('active', showTranslation);
-    renderTranscript();
-}
-function togglePinyin() {
-    showPinyin = !showPinyin;
-    togglePinyinBtn.classList.toggle('active', showPinyin);
-    renderTranscript();
-}
-
-levelSelect.onchange = actualizarLecciones;
-lessonSelect.onchange = updateAudioSelector;
-document.getElementById('loadAudioBtn').onclick = loadSelectedAudio;
-document.getElementById('showEditorBtn').onclick = showAdvancedEditor;
-toggleTranslationBtn.onclick = toggleTranslation;
-togglePinyinBtn.onclick = togglePinyin;
-audioPlayer.onplay = startKaraokeSync;
-syncFixBtn.onclick = forceSync;
-
-cargarTranscripcionesGuardadas();
-inicializarAudios();
-</script>
-</body>
-</html>
+(async()=>{
+ try{const r=await fetch('dialogos.json',{cache:'no-store'});if(!r.ok)throw 0;DB=await r.json()}
+ catch(e){info(location.protocol==='file:'?'❌ El navegador bloquea dialogos.json al abrir el HTML con doble clic. Sírvelo desde un servidor (por ejemplo GitHub Pages) junto a la carpeta audios.':'❌ No se pudo cargar dialogos.json (¿está junto a este HTML?).');return}
+ try{const r=await fetch('audios/manifest.json',{cache:'no-store'});if(r.ok){const m=await r.json();
+  if(Array.isArray(m))m.forEach(n=>{const id=n.replace(/\.[^.]+$/,'');if(!DB[id])DB[id]={zh:''}})}}catch(e){}
+ IDS=Object.keys(DB).sort(cmp);fillLevels();info('✅ '+IDS.length+' diálogos cargados.')})();
+})();
+</script></body></html>
