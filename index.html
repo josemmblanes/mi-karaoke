@@ -91,181 +91,28 @@
 
 <script>
 const HSK_DATA = {
-"1_2_1": { "zh": "女: 你好
-男: 你好", "es": "Mujer: Hola
-Hombre: Hola", "pinyin": "nǚ: nǐ hǎo
-nán: nǐ hǎo" },
-"1_2_2": { "zh": "女: 您好
-男: 你们 好", "es": "Mujer: Hola (formal)
-Hombre: Hola a vosotros", "pinyin": "nǚ: nín hǎo
-nán: nǐ men hǎo" },
-"1_2_3": { "zh": "男: 再见
-女: 再见", "es": "Hombre: Adiós
-Mujer: Adiós", "pinyin": "nán: zài jiàn
-nǚ: zài jiàn" },
-"1_2_4": { "zh": "女: 谢谢 你
-男: 不客气", "es": "Mujer: Gracias
-Hombre: De nada", "pinyin": "nǚ: xiè xiè nǐ
-nán: bù kè qì" },
-"1_2_5": { "zh": "男: 对不起
-女: 没关系", "es": "Hombre: Lo siento
-Mujer: No pasa nada", "pinyin": "nán: duì bù qǐ
-nǚ: méi guān xì" },
-"1_3_1": { "zh": "女: 你 叫什么 名字?
-男: 我 叫 李月。", "es": "Mujer: ¿Cómo te llamas?
-Hombre: Me llamo Li Yue.", "pinyin": "nǚ: nǐ jiào shén me míng zi?
-nán: wǒ jiào lǐ yuè." },
-"1_3_2": { "zh": "男: 你 是 老师 吗?
-女: 我 不是 老师, 我 是 学生。", "es": "Hombre: ¿Eres profesor?
-Mujer: No soy profesora, soy estudiante.", "pinyin": "nán: nǐ shì lǎo shī ma?
-nǚ: wǒ bú shì lǎo shī, wǒ shì xué shēng." },
-"1_3_3": { "zh": "女: 你 是 中国人 吗?
-男: 我 不是 中国人, 我 是 美国人。", "es": "Mujer: ¿Eres chino?
-Hombre: No soy chino, soy estadounidense.", "pinyin": "nǚ: nǐ shì zhōng guó rén ma?
-nán: wǒ bú shì zhōng guó rén, wǒ shì měi guó rén." },
-"1_3_4": { "zh": "男: 你 是 哪 国 人?
-女: 我 是 美国人, 你 呢?
-男: 我 是 中国人。", "es": "Hombre: ¿De qué país eres?
-Mujer: Soy estadounidense, ¿y tú?
-Hombre: Soy chino.", "pinyin": "nán: nǐ shì nǎ guó rén?
-nǚ: wǒ shì měi guó rén, nǐ ne?
-nán: wǒ shì zhōng guó rén." },
-"1_4_1": { "zh": "女: 你好。
-男: 你好。
-女: 你好 吗?
-男: 我 很好, 你 呢?
-女: 我 也 很好, 谢谢!", "es": "Mujer: Hola.
-Hombre: Hola.
-Mujer: ¿Qué tal estás?
-Hombre: Estoy muy bien, ¿y tú?
-Mujer: Yo también estoy muy bien, ¡gracias!", "pinyin": "nǚ: nǐ hǎo.
-nán: nǐ hǎo.
-nǚ: nǐ hǎo ma?
-nán: wǒ hěn hǎo, nǐ ne?
-nǚ: wǒ yě hěn hǎo, xiè xiè!" },
-"1_4_2": { "zh": "女: 你好。
-男: 你好! 很 高兴 认识 你。
-女: 我 也 很 高兴。", "es": "Mujer: Hola.
-Hombre: ¡Hola! Encantado de conocerte.
-Mujer: El placer es mío.", "pinyin": "nǚ: nǐ hǎo.
-nán: nǐ hǎo! hěn gāo xìng rèn shi nǐ.
-nǚ: wǒ yě hěn gāo xìng." },
-"1_4_3": { "zh": "女: 她 是 谁?
-男: 她 是 我的 汉语 老师, 她 叫 李月。", "es": "Mujer: ¿Quién es ella?
-Hombre: Es mi profesora de chino, se llama Li Yue.", "pinyin": "nǚ: tā shì shuí?
-nán: tā shì wǒ de hàn yǔ lǎo shī, tā jiào lǐ yuè." },
-"1_4_4": { "zh": "女: 他 是 谁?
-男: 他 是 我 同学。
-女: 她 呢? 她 是 你 同学 吗?
-男: 她 不是 我 同学, 她 是 我 朋友。", "es": "Mujer: ¿Quién es él?
-Hombre: Es mi compañero de estudios.
-Mujer: ¿Y ella? ¿Es tu compañera de estudios?
-Hombre: No es mi compañera de estudios, es mi amiga.", "pinyin": "nǚ: tā shì shuí?
-nán: tā shì wǒ tóng xué.
-nǚ: tā ne? tā shì nǐ tóng xué ma?
-nán: tā bú shì wǒ tóng xué, tā shì wǒ péng you." },
-"1_4_5": { "zh": "女: 这是 你 爸爸、妈妈 吗?
-男: 对, 这是 我 爸爸, 这是 我 妈妈。
-女: 你 爸爸 在 哪儿 工作?
-男: 他 在 医院 工作. 他 是 医生。
-女: 你 妈妈 呢?
-男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?
-Hombre: Sí, este es mi padre, esta es mi madre.
-Mujer: ¿Dónde trabaja tu padre?
-Hombre: Él trabaja en el hospital. Es médico.
-Mujer: ¿Y tu madre?
-Hombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?
-nán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.
-nǚ: nǐ bà ba zài nǎ ér gōng zuò?
-nán: tā zài yī yuàn gōng zuò. tā shì yī shēng.
-nǚ: nǐ mā ma ne?
-nán: tā bù gōng zuò." },
-"1_5_1": { "zh": "女: 这是 谁?
-男: 这是 我 爸爸。
-女: 那 是 谁?
-男: 那 是 我 妈妈。", "es": "Mujer: ¿Quién es este?
-Hombre: Este es mi padre.
-Mujer: ¿Quién es aquella?
-Hombre: Aquella es mi madre.", "pinyin": "nǚ: zhè shì shuí?
-nán: zhè shì wǒ bà ba.
-nǚ: nà shì shuí?
-nán: nà shì wǒ mā ma." },
-"1_5_2": { "zh": "女: 这是 你 爸爸、妈妈 吗？
-男: 对，这是 我 爸爸，这是 我 妈妈。
-女: 你 爸爸 在 哪儿 工作？
-男: 他 在 医院 工作。他 是 医生。
-女: 你 妈妈 呢？
-男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?
-Hombre: Sí, este es mi padre, esta es mi madre.
-Mujer: ¿Dónde trabaja tu padre?
-Hombre: Él trabaja en el hospital. Es médico.
-Mujer: ¿Y tu madre?
-Hombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?
-nán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.
-nǚ: nǐ bà ba zài nǎ ér gōng zuò?
-nán: tā zài yī yuàn gōng zuò. tā shì yī shēng.
-nǚ: nǐ mā ma ne?
-nán: tā bù gōng zuò." },
-"1_5_3": { "zh": "女: 小猫 在 哪儿?
-男: 小猫 在 那儿。
-女: 小狗 在 哪儿?
-男: 小狗 在 椅子 下面。", "es": "Mujer: ¿Dónde está el gatito?
-Hombre: El gatito está allí.
-Mujer: ¿Dónde está el perrito?
-Hombre: El perrito está debajo de la silla.", "pinyin": "nǚ: xiǎo māo zài nǎ ér?
-nán: xiǎo māo zài nà ér.
-nǚ: xiǎo gǒu zài nǎ ér?
-nán: xiǎo gǒu zài yǐ zi xià miàn." },
-"1_5_4": { "zh": "女: 你 在 哪儿 工作?
-男: 我 在 学校 工作。
-女: 你 儿子 在 哪儿 工作?
-男: 我 儿子 在 医院 工作, 他 是 医生。", "es": "Mujer: ¿Dónde trabajas?
-Hombre: Trabajo en la escuela.
-Mujer: ¿Dónde trabaja tu hijo?
-Hombre: Mi hijo trabaja en el hospital, es médico.", "pinyin": "nǚ: nǐ zài nǎ ér gōng zuò?
-nán: wǒ zài xué xiào gōng zuò.
-nǚ: nǐ ér zi zài nǎ ér gōng zuò?
-nán: wǒ ér zi zài yī yuàn gōng zuò, tā shì yī shēng." },
-"1_5_5": { "zh": "女: 这儿 有 人 吗?
-男: 没有。
-女: 我 能 坐 这儿 吗?
-男: 请坐。", "es": "Mujer: ¿Aquí hay alguien?
-Hombre: No hay.
-Mujer: ¿Me puedo sentar aquí?
-Hombre: Por favor, siéntate.", "pinyin": "nǚ: zhè ér yǒu rén ma?
-nán: méi yǒu.
-nǚ: wǒ néng zuò zhè ér ma?
-nán: qǐng zuò." },
-"1_6_1": { "zh": "女: 你 想 喝 什么?
-男: 我 想 喝 茶。
-女: 你 想 吃 什么?
-男: 我 想 吃 米饭。", "es": "Mujer: ¿Qué quieres beber?
-Hombre: Quiero beber té.
-Mujer: ¿Qué quieres comer?
-Hombre: Quiero comer arroz.", "pinyin": "nǚ: nǐ xiǎng hē shén me?
-nán: wǒ xiǎng hē chá.
-nǚ: nǐ xiǎng chī shén me?
-nán: wǒ xiǎng chī mǐ fàn." },
-"1_6_2": { "zh": "男: 下午 你 想 做 什么?
-女: 下午 我 想 去 商店。
-男: 你 想 买 什么?
-女: 我 想 买 一个 杯子。", "es": "Hombre: ¿Qué quieres hacer por la tarde?
-Mujer: Por la tarde quiero ir a la tienda.
-Hombre: ¿Qué quieres comprar?
-Mujer: Quiero comprar un vaso.", "pinyin": "nán: xià wǔ nǐ xiǎng zuò shén me?
-nǚ: xià wǔ wǒ xiǎng qù shāng diàn.
-nán: nǐ xiǎng mǎi shén me?
-nǚ: wǒ xiǎng mǎi yí gè bēi zi." },
-"1_6_3": { "zh": "女: 你好! 这个 杯子 多少 钱?
-男: 二十八 块。
-女: 那个 杯子 多少 钱?
-男: 那个 杯子 十八 块钱。", "es": "Mujer: ¡Hola! ¿Cuánto cuesta este vaso?
-Hombre: Veintiocho yuanes.
-Mujer: ¿Cuánto cuesta aquel vaso?
-Hombre: Aquel vaso cuesta dieciocho yuanes.", "pinyin": "nǚ: nǐ hǎo! zhè ge bēi zi duō shao qián?
-nán: èr shí bā kuài.
-nǚ: nà ge bēi zi duō shao qián?
-nán: nà ge bēi zi shí bā kuài qián." }
+"1_2_1": { "zh": "女: 你好\n男: 你好", "es": "Mujer: Hola\nHombre: Hola", "pinyin": "nǚ: nǐ hǎo\nnán: nǐ hǎo" },
+"1_2_2": { "zh": "女: 您好\n男: 你们 好", "es": "Mujer: Hola (formal)\nHombre: Hola a vosotros", "pinyin": "nǚ: nín hǎo\nnán: nǐ men hǎo" },
+"1_2_3": { "zh": "男: 再见\n女: 再见", "es": "Hombre: Adiós\nMujer: Adiós", "pinyin": "nán: zài jiàn\nnǚ: zài jiàn" },
+"1_2_4": { "zh": "女: 谢谢 你\n男: 不客气", "es": "Mujer: Gracias\nHombre: De nada", "pinyin": "nǚ: xiè xiè nǐ\nnán: bù kè qì" },
+"1_2_5": { "zh": "男: 对不起\n女: 没关系", "es": "Hombre: Lo siento\nMujer: No pasa nada", "pinyin": "nán: duì bù qǐ\nnǚ: méi guān xì" },
+"1_3_1": { "zh": "女: 你 叫什么 名字?\n男: 我 叫 李月。", "es": "Mujer: ¿Cómo te llamas?\nHombre: Me llamo Li Yue.", "pinyin": "nǚ: nǐ jiào shén me míng zi?\nnán: wǒ jiào lǐ yuè." },
+"1_3_2": { "zh": "男: 你 是 老师 吗?\n女: 我 不是 老师, 我 是 学生。", "es": "Hombre: ¿Eres profesor?\nMujer: No soy profesora, soy estudiante.", "pinyin": "nán: nǐ shì lǎo shī ma?\nnǚ: wǒ bú shì lǎo shī, wǒ shì xué shēng." },
+"1_3_3": { "zh": "女: 你 是 中国人 吗?\n男: 我 不是 中国人, 我 是 美国人。", "es": "Mujer: ¿Eres chino?\nHombre: No soy chino, soy estadounidense.", "pinyin": "nǚ: nǐ shì zhōng guó rén ma?\nnán: wǒ bú shì zhōng guó rén, wǒ shì měi guó rén." },
+"1_3_4": { "zh": "男: 你 是 哪 国 人?\n女: 我 是 美国人, 你 呢?\n男: 我 是 中国人。", "es": "Hombre: ¿De qué país eres?\nMujer: Soy estadounidense, ¿y tú?\nHombre: Soy chino.", "pinyin": "nán: nǐ shì nǎ guó rén?\nnǚ: wǒ shì měi guó rén, nǐ ne?\nnán: wǒ shì zhōng guó rén." },
+"1_4_1": { "zh": "女: 你好。\n男: 你好。\n女: 你好 吗?\n男: 我 很好, 你 呢?\n女: 我 也 很好, 谢谢!", "es": "Mujer: Hola.\nHombre: Hola.\nMujer: ¿Qué tal estás?\nHombre: Estoy muy bien, ¿y tú?\nMujer: Yo también estoy muy bien, ¡gracias!", "pinyin": "nǚ: nǐ hǎo.\nnán: nǐ hǎo.\nnǚ: nǐ hǎo ma?\nnán: wǒ hěn hǎo, nǐ ne?\nnǚ: wǒ yě hěn hǎo, xiè xiè!" },
+"1_4_2": { "zh": "女: 你好。\n男: 你好! 很 高兴 认识 你。\n女: 我 也 很 高兴。", "es": "Mujer: Hola.\nHombre: ¡Hola! Encantado de conocerte.\nMujer: El placer es mío.", "pinyin": "nǚ: nǐ hǎo.\nnán: nǐ hǎo! hěn gāo xìng rèn shi nǐ.\nnǚ: wǒ yě hěn gāo xìng." },
+"1_4_3": { "zh": "女: 她 是 谁?\n男: 她 是 我的 汉语 老师, 她 叫 李月。", "es": "Mujer: ¿Quién es ella?\nHombre: Es mi profesora de chino, se llama Li Yue.", "pinyin": "nǚ: tā shì shuí?\nnán: tā shì wǒ de hàn yǔ lǎo shī, tā jiào lǐ yuè." },
+"1_4_4": { "zh": "女: 他 是 谁?\n男: 他 是 我 同学。\n女: 她 呢? 她 是 你 同学 吗?\n男: 她 不是 我 同学, 她 是 我 朋友。", "es": "Mujer: ¿Quién es él?\nHombre: Es mi compañero de estudios.\nMujer: ¿Y ella? ¿Es tu compañera de estudios?\nHombre: No es mi compañera de estudios, es mi amiga.", "pinyin": "nǚ: tā shì shuí?\nnán: tā shì wǒ tóng xué.\nnǚ: tā ne? tā shì nǐ tóng xué ma?\nnán: tā bú shì wǒ tóng xué, tā shì wǒ péng you." },
+"1_4_5": { "zh": "女: 这是 你 爸爸、妈妈 吗?\n男: 对, 这是 我 爸爸, 这是 我 妈妈。\n女: 你 爸爸 在 哪儿 工作?\n男: 他 在 医院 工作. 他 是 医生。\n女: 你 妈妈 呢?\n男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?\nHombre: Sí, este es mi padre, esta es mi madre.\nMujer: ¿Dónde trabaja tu padre?\nHombre: Él trabaja en el hospital. Es médico.\nMujer: ¿Y tu madre?\nHombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?\nnán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.\nnǚ: nǐ bà ba zài nǎ ér gōng zuò?\nnán: tā zài yī yuàn gōng zuò. tā shì yī shēng.\nnǚ: nǐ mā ma ne?\nnán: tā bù gōng zuò." },
+"1_5_1": { "zh": "女: 这是 谁?\n男: 这是 我 爸爸。\n女: 那 是 谁?\n男: 那 是 我 妈妈。", "es": "Mujer: ¿Quién es este?\nHombre: Este es mi padre.\nMujer: ¿Quién es aquella?\nHombre: Aquella es mi madre.", "pinyin": "nǚ: zhè shì shuí?\nnán: zhè shì wǒ bà ba.\nnǚ: nà shì shuí?\nnán: nà shì wǒ mā ma." },
+"1_5_2": { "zh": "女: 这是 你 爸爸、妈妈 吗？\n男: 对，这是 我 爸爸，这是 我 妈妈。\n女: 你 爸爸 在 哪儿 工作？\n男: 他 在 医院 工作。他 是 医生。\n女: 你 妈妈 呢？\n男: 她 不 工作。", "es": "Mujer: ¿Estos son tu padre y tu madre?\nHombre: Sí, este es mi padre, esta es mi madre.\nMujer: ¿Dónde trabaja tu padre?\nHombre: Él trabaja en el hospital. Es médico.\nMujer: ¿Y tu madre?\nHombre: Ella no trabaja.", "pinyin": "nǚ: zhè shì nǐ bà ba, mā ma ma?\nnán: duì, zhè shì wǒ bà ba, zhè shì wǒ mā ma.\nnǚ: nǐ bà ba zài nǎ ér gōng zuò?\nnán: tā zài yī yuàn gōng zuò. tā shì yī shēng.\nnǚ: nǐ mā ma ne?\nnán: tā bù gōng zuò." },
+"1_5_3": { "zh": "女: 小猫 在 哪儿?\n男: 小猫 在 那儿。\n女: 小狗 在 哪儿?\n男: 小狗 在 椅子 下面。", "es": "Mujer: ¿Dónde está el gatito?\nHombre: El gatito está allí.\nMujer: ¿Dónde está el perrito?\nHombre: El perrito está debajo de la silla.", "pinyin": "nǚ: xiǎo māo zài nǎ ér?\nnán: xiǎo māo zài nà ér.\nnǚ: xiǎo gǒu zài nǎ ér?\nnán: xiǎo gǒu zài yǐ zi xià miàn." },
+"1_5_4": { "zh": "女: 你 在 哪儿 工作?\n男: 我 在 学校 工作。\n女: 你 儿子 在 哪儿 工作?\n男: 我 儿子 在 医院 工作, 他 是 医生。", "es": "Mujer: ¿Dónde trabajas?\nHombre: Trabajo en la escuela.\nMujer: ¿Dónde trabaja tu hijo?\nHombre: Mi hijo trabaja en el hospital, es médico.", "pinyin": "nǚ: nǐ zài nǎ ér gōng zuò?\nnán: wǒ zài xué xiào gōng zuò.\nnǚ: nǐ ér zi zài nǎ ér gōng zuò?\nnán: wǒ ér zi zài yī yuàn gōng zuò, tā shì yī shēng." },
+"1_5_5": { "zh": "女: 这儿 有 人 吗?\n男: 没有。\n女: 我 能 坐 这儿 吗?\n男: 请坐。", "es": "Mujer: ¿Aquí hay alguien?\nHombre: No hay.\nMujer: ¿Me puedo sentar aquí?\nHombre: Por favor, siéntate.", "pinyin": "nǚ: zhè ér yǒu rén ma?\nnán: méi yǒu.\nnǚ: wǒ néng zuò zhè ér ma?\nnán: qǐng zuò." },
+"1_6_1": { "zh": "女: 你 想 喝 什么?\n男: 我 想 喝 茶。\n女: 你 想 吃 什么?\n男: 我 想 吃 米饭。", "es": "Mujer: ¿Qué quieres beber?\nHombre: Quiero beber té.\nMujer: ¿Qué quieres comer?\nHombre: Quiero comer arroz.", "pinyin": "nǚ: nǐ xiǎng hē shén me?\nnán: wǒ xiǎng hē chá.\nnǚ: nǐ xiǎng chī shén me?\nnán: wǒ xiǎng chī mǐ fàn." },
+"1_6_2": { "zh": "男: 下午 你 想 做 什么?\n女: 下午 我 想 去 商店。\n男: 你 想 买 什么?\n女: 我 想 买 一个 杯子。", "es": "Hombre: ¿Qué quieres hacer por la tarde?\nMujer: Por la tarde quiero ir a la tienda.\nHombre: ¿Qué quieres comprar?\nMujer: Quiero comprar un vaso.", "pinyin": "nán: xià wǔ nǐ xiǎng zuò shén me?\nnǚ: xià wǔ wǒ xiǎng qù shāng diàn.\nnán: nǐ xiǎng mǎi shén me?\nnǚ: wǒ xiǎng mǎi yí gè bēi zi." },
+"1_6_3": { "zh": "女: 你好! 这个 杯子 多少 钱?\n男: 二十八 块。\n女: 那个 杯子 多少 钱?\n男: 那个 杯子 十八 块钱。", "es": "Mujer: ¡Hola! ¿Cuánto cuesta este vaso?\nHombre: Veintiocho yuanes.\nMujer: ¿Cuánto cuesta aquel vaso?\nHombre: Aquel vaso cuesta dieciocho yuanes.", "pinyin": "nǚ: nǐ hǎo! zhè ge bēi zi duō shao qián?\nnán: èr shí bā kuài.\nnǚ: nà ge bēi zi duō shao qián?\nnán: nà ge bēi zi shí bā kuài qián." }
 };
 
 let AUDIOS_DETECTADOS = [];
