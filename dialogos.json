@@ -130,9 +130,9 @@
   "pinyin": "nǚ: xiǎo zhāng, nǐ jiā yǒu jǐ gè rén?\nnán: wǒ jiā yǒu liù gè rén."
  },
  "1_7_5": {
-  "zh": "A: 你 女儿 几岁?\nB: 她 今年 四岁 了。",
-  "es": "A: ¿Cuántos años tiene tu hija?\nB: Ella tiene cuatro años este año.",
-  "pinyin": "A: nǐ nǚ ér jǐ suì?\nB: tā jīn nián sì suì le."
+  "zh": "女: 你 女儿 几岁?\n男: 她 今年 四岁 了。",
+  "es": "女: ¿Cuántos años tiene tu hija?\n男: Ella tiene cuatro años este año.",
+  "pinyin": "女: nǐ nǚ ér jǐ suì?\n男: tā jīn nián sì suì le."
  },
  "1_8_1": {
   "zh": "女: 你 会 说 汉语 吗?\n男: 我 会 说 汉语。\n女: 你 妈妈 会 说 汉语 吗?\n男: 她 不会 说。",
