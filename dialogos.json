@@ -419,6 +419,16 @@
   "es": "Hombre: El animal favorito de mi hija es el panda gigante. Ella piensa que los pandas son especialmente lindos. Cada vez que la llevamos al zoológico, al momento de irnos siempre tiene que ir a despedirse del panda.",
   "pinyin": "nán: nǚ ér zuì xǐ huan de dòng wù shì dà xióng māo. tā jué de dà xióng māo tè bié kě ài. měi cì wǒ men dài tā qù dòng wù yuán, zǒu de shí hou tā dōu yào qù hé dà xióng māo shuō zài jiàn."
  },
+ "3_3_3": {
+  "zh": "男: 星期一 是 姐姐 的 生日， 她 爱 穿 裙子。 我 决定 买 一条 蓝色 的 长裙 送给 她。",
+  "es": "Hombre: El lunes es el cumpleaños de mi hermana mayor, a ella le encanta usar faldas. Decidí comprarle una falda larga azul.",
+  "pinyin": "nán: xīng qī yī shì jiě jie de shēng rì, tā ài chuān qún zi. wǒ jué dìng mǎi yì tiáo lán sè de cháng qún sòng gěi tā."
+ },
+ "3_3_4": {
+  "zh": "男: 这 本 历史书 对 我 来说 太 难 了。 因为 我 只 学 了 一年 汉语， 有 很多 字 我 还 不 认识， 所以 书 中 的 很多 句子 我 都 不 明白 是 什么 意思。",
+  "es": "Hombre: Este libro de historia es demasiado difícil para mí. Como solo llevo un año estudiando chino, hay muchos caracteres que todavía no conozco, así que no entiendo el significado de muchas frases del libro.",
+  "pinyin": "nán: zhè běn lì shǐ shū duì wǒ lái shuō tài nán le. yīn wèi wǒ zhǐ xué le yì nián hàn yǔ, yǒu hěn duō zì wǒ hái bú rèn shi, suǒ yǐ shū zhōng de hěn duō jù zi wǒ dōu bù míng bai shì shén me yì si."
+ },
  "3_3_5": {
   "zh": "女: 我 昨天 穿 的 那件 绿色 的 衬衫 呢?\n男: 我 给 你 洗 了。",
   "es": "Mujer: ¿Dónde está la camisa verde que me puse ayer?\nHombre: Te la lavé.",
@@ -489,6 +499,11 @@
   "es": "Hombre: ¿Ya encontraste casa? ¿Cuándo te mudas?\nMujer: Este fin de semana.\nHombre: ¿Contrataste una empresa de mudanzas?\nMujer: No. Mi amigo tiene coche. Dijo que vendría a ayudar.",
   "pinyin": "nán: fáng zi zhǎo hǎo le ma? shén me shí hòu bān?\nnǚ: zhè ge zhōu mò.\nnán: zhǎo bān jiā gōng sī le ma?\nnǚ: méi yǒu. wǒ péng yǒu yǒu chē. tā shuō huì lái bāng máng."
  },
+ "3_5_5": {
+  "zh": "男: 我 刚才 在 商店 门口 遇到 高 校长 了。\n女: 他 最近 怎么样？\n男: 没 什么 变化。 现在 还 教 三年级 的 数学课 呢。\n女: 是 吗？ 他 的 身体 一直 都 很 不错。",
+  "es": "Hombre: Hace un momento me encontré al director Gao en la puerta de la tienda.\nMujer: ¿Cómo está últimamente?\nHombre: Sin cambios. Todavía da clases de matemáticas a tercer curso.\nMujer: ¿Ah sí? Su salud siempre ha sido muy buena.",
+  "pinyin": "nán: wǒ gāng cái zài shāng diàn mén kǒu yù dào gāo xiào zhǎng le.\nnǚ: tā zuì jìn zěn me yàng?\nnán: méi shén me biàn huà. xiàn zài hái jiāo sān nián jí de shù xué kè ne.\nnǚ: shì ma? tā de shēn tǐ yì zhí dōu hěn bú cuò."
+ },
  "3_6_1": {
   "zh": "女: 你 看, 这个 包 怎么样?\n男: 不错, 但是 我 觉得 旁边 那个 上面 有 月亮 的 更 好看。",
   "es": "Mujer: Mira, ¿qué te parece este bolso?\nHombre: No está mal, pero creo que aquel de al lado que tiene una luna es más bonito.",
@@ -507,7 +522,7 @@
  "3_6_4": {
   "zh": "男: 你 学会 用 筷子 了?\n女: 是 的, 一个 中国 朋友 教 我 的。 我 练习 了 好几天 才 学会。",
   "es": "Hombre: ¿Has aprendido a usar los palillos?\nMujer: Sí, me enseñó un amigo chino. Practiqué durante varios días antes de aprender.",
-  "pinyin": "nán: nǐ xué huì yòng kuài zi le?\nnǚ: shì de, yí gè zhōng guó péng yǒu jiào wǒ de. wǒ liàn xí le hǎo jǐ tiān cái xué huì."
+  "pinyin": "nán: nǐ xué huì yòng kuài zi le?\nnǚ: shì de, yí gè zhōng guó péng yǒu jiāo wǒ de. wǒ liàn xí le hǎo jǐ tiān cái xué huì."
  },
  "3_6_5": {
   "zh": "女: 还要 多久 啊? 我 都 站 了 一个 小时 了。 太累 了!\n男: 我 很快 就 画完 了, 姐, 你 站好, 别 动。",
@@ -537,7 +552,7 @@
  "3_6_10": {
   "zh": "女: 我 中午 只 吃 了 点儿 菜, 没 吃 米饭。 现在 真 饿。\n男: 冰箱里 有 块儿 蛋糕。 你 去 吃 了 吧。",
   "es": "Mujer: A mediodía solo comí algo de verdura, no comí arroz. Ahora tengo mucha hambre.\nHombre: Hay un trozo de pastel en la nevera. Ve a comértelo.",
-  "pinyin": "nǚ: wǒ zhōng wǔ zhī chī le diǎn ér cài, méi chī mǐ fàn. xiàn zài zhēn è.\nnán: bīng xiāng lǐ yǒu kuài ér dàn gāo. nǐ qù chī le ba."
+  "pinyin": "nǚ: wǒ zhōng wǔ zhǐ chī le diǎn ér cài, méi chī mǐ fàn. xiàn zài zhēn è.\nnán: bīng xiāng lǐ yǒu kuài ér dàn gāo. nǐ qù chī le ba."
  },
  "3_7_1": {
   "zh": "男: 你 不 去 留学 了?\n女: 对, 我 已经 在 南方 一个 城市 找好 工作 了。",
@@ -687,7 +702,7 @@
  "4_1_2": {
   "zh": "男: 我 约 了 几个 同学 星期六 上午 去 打 网球, 你 也 去?\n女: 可是 我 不会 打 网球。\n男: 那 你 会 打 羽毛球 吗?\n女: 会。\n男: 网球 跟 羽毛球 差不多, 很 好 学, 到时候 我 教 你。",
   "es": "Hombre: He quedado con unos compañeros de clase para jugar al tenis el sábado por la mañana, ¿tú también vas?\nMujer: Pero yo no sé jugar al tenis.\nHombre: Entonces, ¿sabes jugar al bádminton?\nMujer: Sí.\nHombre: El tenis es parecido al bádminton, es muy fácil de aprender, ya te enseñaré cuando llegue el momento.",
-  "pinyin": "nán: wǒ yuē le jǐ gè tóng xué xīng qī liù shàng wǔ qù dǎ wǎng qiú, nǐ yě qù?\nnǚ: kě shì wǒ bú huì dǎ wǎng qiú.\nnán: nà nǐ huì dǎ yǔ máo qiú ma?\nnǚ: huì.\nnán: wǎng qiú gēn yǔ máo qiú chà bù duō, hěn hǎo xué, dào shí hòu wǒ jiào nǐ."
+  "pinyin": "nán: wǒ yuē le jǐ gè tóng xué xīng qī liù shàng wǔ qù dǎ wǎng qiú, nǐ yě qù?\nnǚ: kě shì wǒ bú huì dǎ wǎng qiú.\nnán: nà nǐ huì dǎ yǔ máo qiú ma?\nnǚ: huì.\nnán: wǎng qiú gēn yǔ máo qiú chà bù duō, hěn hǎo xué, dào shí hòu wǒ jiāo nǐ."
  },
  "4_1_3": {
   "zh": "女: 师傅, 请问 还有 饼干 吗?\n男: 卖完 了, 蛋糕 还要 吗?\n女: 刚 出炉 的 蛋糕 挺 香 的, 给 我 来 两个 吧, 多少 钱?\n男: 每 一个 六块钱, 一共 十二块。",
@@ -734,6 +749,16 @@
   "es": "Hombre: Los requisitos para esta oferta de empleo son bastante altos, ¿estás segura?\nMujer: Aunque la escuela de la que me gradué no es la más famosa, mi experiencia laboral es rica, así que no debería haber problema.\nHombre: ¡Te deseo éxito!\nMujer: ¡Gracias!",
   "pinyin": "nán: zhè cì zhāo pìn de yāo qiú tǐng gāo de, nǐ yǒu bǎ wò ma?\nnǚ: suī rán wǒ bì yè de xué xiào bú shì zuì yǒu míng de, dàn wǒ de gōng zuò jīng yàn fēng fù, yīng gāi méi wèn tí.\nnán: zhù nǐ chéng gōng!\nnǚ: xiè xiè!"
  },
+ "4_3_4": {
+  "zh": "男: 来 北方 好 几年 了 吧？ 你 觉得 北方 和 南方 在 气候 上 有 什么 区别？\n女: 夏天 都 差不多， 只是 冬天 北方 比较 干燥， 而 南方 更 湿润。",
+  "es": "Hombre: ¿Llevas ya varios años en el norte, verdad? ¿Qué diferencias crees que hay entre el norte y el sur en cuanto al clima?\nMujer: En verano son casi iguales; solo que en invierno el norte es más seco, mientras que el sur es más húmedo.",
+  "pinyin": "nán: lái běi fāng hǎo jǐ nián le ba? nǐ jué de běi fāng hé nán fāng zài qì hòu shàng yǒu shén me qū bié?\nnǚ: xià tiān dōu chà bù duō, zhǐ shì dōng tiān běi fāng bǐ jiào gān zào, ér nán fāng gèng shī rùn."
+ },
+ "4_3_5": {
+  "zh": "中国 南北 距离 约 5500 公里， 因此 南北 气候 有 很 大 区别。 南方 很多 地方 的 冬天 一点儿 也 不 冷， 温度 跟 北方 春天 差不多， 二月 的 时候 已经 很 暖和， 可以 只 穿 一件 毛衣 了， 树 开始 长出 新 叶子， 路边 的 花 也 开 了， 非常 漂亮。 所以 很多 北方人 都 喜欢 这个 时候 出发 去 南方 旅游。 不过 可惜 的 是， 南方 很多 地方 冬天 都 看 不到 雪， 孩子们 少 了 玩 雪 的 快乐。",
+  "es": "La distancia de norte a sur de China es de unos 5500 kilómetros, por lo que el clima del norte y el del sur es muy distinto. En muchos lugares del sur el invierno no es nada frío y la temperatura es parecida a la de la primavera en el norte; en febrero ya hace un tiempo muy templado y basta con llevar un jersey, los árboles empiezan a echar hojas nuevas y las flores de los caminos también han florecido, todo es muy bonito. Por eso a muchos norteños les gusta salir de viaje al sur en esta época. Lo lamentable es que en muchos lugares del sur no se ve nieve en invierno, y los niños se pierden la alegría de jugar con ella.",
+  "pinyin": "zhōng guó nán běi jù lí yuē wǔ qiān wǔ bǎi gōng lǐ, yīn cǐ nán běi qì hòu yǒu hěn dà qū bié. nán fāng hěn duō dì fang de dōng tiān yì diǎn ér yě bù lěng, wēn dù gēn běi fāng chūn tiān chà bù duō, èr yuè de shí hou yǐ jīng hěn nuǎn huo, kě yǐ zhǐ chuān yí jiàn máo yī le, shù kāi shǐ zhǎng chū xīn yè zi, lù biān de huā yě kāi le, fēi cháng piào liang. suǒ yǐ hěn duō běi fāng rén dōu xǐ huan zhè ge shí hou chū fā qù nán fāng lǚ yóu. bú guò kě xī de shì, nán fāng hěn duō dì fang dōng tiān dōu kàn bú dào xuě, hái zi men shǎo le wán xuě de kuài lè."
+ },
  "4_4_1": {
   "zh": "女: 你 学习 功夫 多长时间 了?\n男: 从 六岁 开始, 到 现在 已经 二十多年 了。\n女: 一定 挺 辛苦、 挺 累 的 吧?\n男: 是, 不过 回头 想想, 虽然 辛苦, 但 一切 都是 值得 的。",
   "es": "Mujer: ¿Cuánto tiempo llevas aprendiendo kung-fu?\nHombre: Empecé desde los seis años, y hasta ahora ya han pasado más de veinte años.\nMujer: Debe de ser muy duro y agotador, ¿verdad?\nHombre: Ciertamente lo es, pero mirando atrás, aunque fue difícil, todo ha valido la pena.",
@@ -754,6 +779,11 @@
   "es": "Hombre: Hola, me gustaría cambiar algo de dinero suelto, ¿le viene bien?\nMujer: Hola, disculpe, ¿cómo le gustaría cambiarlo?\nHombre: Cambie este billete de cien por dos de cincuenta.\nMujer: De acuerdo, aquí tiene, cuéntelo por favor.",
   "pinyin": "nán: nǐ hǎo, wǒ xiǎng yào huàn yì xiē líng qián, fāng biàn ma?\nnǚ: nín hǎo, qǐng wèn nín xiǎng zěn me huàn?\nnán: bǎ zhè zhāng yì bǎi de huàn chéng liǎng zhāng wǔ shí de ba.\nnǚ: hǎo de, gěi nín, qǐng shǔ yí xià."
  },
+ "4_4_5": {
+  "zh": "幸福 是 什么？ 有 人 说， 能 帮助 别人 就 是 一种 幸福。 也 有 人 说， 健康 才 是 最 大 的 幸福。 还 有 人 说， 小时候 幸福 是 一件 东西， 比如 一 本 书、 一 块儿 巧克力， 得到 了 就 很 幸福； 长大 后 幸福 是 一种 态度， 是 生活 的 态度 决定 了 我们 幸福感 的 高低。 不管 你 认为 幸福 是 什么， 只要 你 用心 去 找， 就 一定 能 发现 它。",
+  "es": "¿Qué es la felicidad? Hay quien dice que ayudar a los demás es una forma de felicidad. Otros dicen que la salud es la mayor felicidad. Y otros dicen que de pequeño la felicidad es una cosa, por ejemplo un libro o un trozo de chocolate: al conseguirlo uno es muy feliz; de mayor la felicidad es una actitud: la actitud ante la vida determina lo alto o lo bajo de nuestra sensación de felicidad. Sea lo que sea la felicidad para ti, si la buscas con empeño, seguro que la encontrarás.",
+  "pinyin": "xìng fú shì shén me? yǒu rén shuō, néng bāng zhù bié rén jiù shì yì zhǒng xìng fú. yě yǒu rén shuō, jiàn kāng cái shì zuì dà de xìng fú. hái yǒu rén shuō, xiǎo shí hòu xìng fú shì yí jiàn dōng xi, bǐ rú yì běn shū, yí kuài ér qiǎo kè lì, dé dào le jiù hěn xìng fú; zhǎng dà hòu xìng fú shì yì zhǒng tài dù, shì shēng huó de tài dù jué dìng le wǒ men xìng fú gǎn de gāo dī. bù guǎn nǐ rèn wéi xìng fú shì shén me, zhǐ yào nǐ yòng xīn qù zhǎo, jiù yí dìng néng fā xiàn tā."
+ },
  "4_4_6": {
   "zh": "关于 读书, 有 两点 必须 要 注意: 第一, 书 不可 不 读。 书 会 让 你 的 知识 更 丰富, 生活 更 精彩。 第二, 不能 读 死书。 读书 的 时候, 如果 没有 一点儿 自己 的 想法 和 判断, 完全 相信 书本 上 的 内容, 那么 读书 对 自己 什么 帮助 都 没有。",
   "es": "Respecto a la lectura, hay dos puntos que se deben tener en cuenta: Primero, no se puede dejar de leer libros. Los libros enriquecerán tus conocimientos y harán tu vida más espléndida. Segundo, no se debe leer de forma dogmática. Al leer, si uno no tiene sus propias ideas y juicios y cree completamente en el contenido del libro, entonces la lectura no servirá de ninguna ayuda para uno mismo.",
@@ -763,6 +793,11 @@
   "zh": "女: 打 了 一下午 羽毛球, 肚子 有点儿 饿 了。\n男: 稍 等 一会儿, 饭 马上 就 好。\n女: 真 香, 今天 吃 什么?\n男: 你 鼻子 真 好, 今晚 我们 吃 饺子。",
   "es": "Mujer: He estado jugando al bádminton toda la tarde, tengo un poco de hambre.\nHombre: Espera un momento, la comida estará lista enseguida.\nMujer: Qué bien huele, ¿qué comemos hoy?\nHombre: Qué buen olfato tienes, esta noche comemos empanadillas chinas.",
   "pinyin": "nǚ: dǎ le yí xià wǔ yǔ máo qiú, dù zi yǒu diǎn er è le.\nnán: shāo děng yí huì er, fàn mǎ shàng jiù hǎo.\nnǚ: zhēn xiāng, jīn tiān chī shén me?\nnán: nǐ bí zi zhēn hǎo, jīn wǎn wǒ men chī jiǎo zi."
+ },
+ "4_5_2": {
+  "zh": "女: 你好， 请问 王 师傅 在 家 吗？\n男: 他 不 在 家， 他 游泳 去 了。\n女: 那 他 什么时候 回来 呢？\n男: 一会儿 就 回来 了 吧。\n女: 好 的， 那 我 过 一会儿 再 联系 吧， 打扰 了， 再见。",
+  "es": "Mujer: Hola, perdone, ¿está en casa el maestro Wang?\nHombre: No está en casa, se ha ido a nadar.\nMujer: ¿Y cuándo volverá?\nHombre: Seguramente vuelva dentro de un rato.\nMujer: Está bien, entonces volveré a contactar dentro de un rato. Perdone la molestia, adiós.",
+  "pinyin": "nǚ: nǐ hǎo, qǐng wèn wáng shī fu zài jiā ma?\nnán: tā bú zài jiā, tā yóu yǒng qù le.\nnǚ: nà tā shén me shí hòu huí lái ne?\nnán: yí huì er jiù huí lái le ba.\nnǚ: hǎo de, nà wǒ guò yí huì er zài lián xì ba, dǎ rǎo le, zài jiàn."
  },
  "4_5_3": {
   "zh": "男: 李 教授, 这 几篇 文章 您 什么时候 要?\n女: 不急, 你 自己 安排, 只要 在 寒假 前 交给 我 就 行。\n男: 没问题, 我 肯定 会 提前 完成 的。\n女: 那样 更 好。",
@@ -779,6 +814,11 @@
   "es": "Hombre: Hola, me gustaría un asiento al lado de la ventana, ¿queda alguno?\nMujer: Déjeme comprobarlo. Lo siento, este vuelo en el que viaja ya no tiene asientos junto a la ventana.\nHombre: Está bien, no pasa nada.\nMujer: Aquí tiene su billete.",
   "pinyin": "nán: nǐ hǎo, wǒ xiǎng yào yí gè chuāng hu páng biān de zuò wèi, hái yǒu ma?\nnǚ: wǒ chá yí xià. duì bù qǐ, nín chéng zuò de zhè ge háng bān méi yǒu chuāng hu biān de zuò wèi le.\nnán: hǎo ba, méi guān xi.\nnǚ: gěi nín piào."
  },
+ "4_6_1": {
+  "zh": "男: 你 工作 找 得 怎么样 了？\n女: 挺 顺利 的， 已经 定 下来 了。\n男: 太 好 了！ 祝贺 你！ 什么时候 正式 上班？\n女: 七月 九号。",
+  "es": "Hombre: ¿Cómo te ha ido la búsqueda de trabajo?\nMujer: Bastante bien, ya está decidido.\nHombre: ¡Qué bien! ¡Felicidades! ¿Cuándo empiezas a trabajar oficialmente?\nMujer: El nueve de julio.",
+  "pinyin": "nán: nǐ gōng zuò zhǎo de zěn me yàng le?\nnǚ: tǐng shùn lì de, yǐ jīng dìng xià lái le.\nnán: tài hǎo le! zhù hè nǐ! shén me shí hòu zhèng shì shàng bān?\nnǚ: qī yuè jiǔ hào."
+ },
  "4_6_2": {
   "zh": "女: 在 这儿 开 家 分店 怎么样?\n男: 我 刚才 也 在 考虑, 周围 很多 写字楼, 但 没 几家 饭店。\n女: 估计 房租 不 便宜。\n男: 咱们 先 了解 一下, 然后 再 决定 到底 要不要 开。",
   "es": "Mujer: ¿Qué tal si abrimos una sucursal aquí?\nHombre: Justo lo estaba pensando hace un momento, hay muchos edificios de oficinas alrededor, pero apenas hay restaurantes.\nMujer: Calculo que el alquiler no será barato.\nHombre: Informémonos primero, y luego decidamos si finalmente la abrimos o no.",
@@ -794,6 +834,16 @@
   "es": "Mujer: ¿Cómo es que te gusta ver la ópera de Pekín?\nHombre: De pequeño, mi abuelo me llevaba a ver la ópera de Pekín casi todos los meses.\nMujer: El contenido de la ópera de Pekín son en su mayoría historias históricas, ¿puedes entenderlo?\nHombre: Mi abuelo me lo iba explicando mientras lo veíamos, lo que me hizo aprender muchos conocimientos.",
   "pinyin": "nǚ: nǐ zěn me huì xǐ huan kàn jīng jù ne?\nnán: xiǎo shí hòu, yé ye chà bù duō měi gè yuè dōu dài wǒ qù kàn yí cì jīng jù.\nnǚ: jīng jù de nèi róng dà duō shì lì shǐ gù shì, nǐ néng kàn dǒng?\nnán: yé ye huì yì biān kàn yì biān gěi wǒ jiè shào, ràng wǒ xué le hěn duō zhī shi."
  },
+ "4_6_5": {
+  "zh": "男: 喂？ 我 刚 看 电视 上 说 今天 有 大雨， 咱们 改天 再 去 植物园 吧。\n女: 好 啊， 那 明天 怎么样？\n男: 明天 恐怕 也 不 行， 明天 是 我 爸 的 生日。\n女: 没关系， 那 我们 再 约 时间。",
+  "es": "Hombre: ¿Hola? Acabo de ver en la tele que hoy habrá fuertes lluvias; vayamos otro día al jardín botánico.\nMujer: Vale, ¿y mañana qué tal?\nHombre: Mañana me temo que tampoco puedo, mañana es el cumpleaños de mi padre.\nMujer: No importa, entonces fijamos otra fecha.",
+  "pinyin": "nán: wèi? wǒ gāng kàn diàn shì shàng shuō jīn tiān yǒu dà yǔ, zán men gǎi tiān zài qù zhí wù yuán ba.\nnǚ: hǎo a, nà míng tiān zěn me yàng?\nnán: míng tiān kǒng pà yě bù xíng, míng tiān shì wǒ bà de shēng rì.\nnǚ: méi guān xi, nà wǒ men zài yuē shí jiān."
+ },
+ "4_6_6": {
+  "zh": "女: 你 看见 我 的 手表 没？\n男: 没有， 是不是 忘 在 宾馆 了？\n女: 不会， 肯定 没 忘 在 宾馆， 我 印象 里 上车 的 时候 还 戴 着 呢。\n男: 那 看看 在 不 在 你 包 里， 不会 丢 在 出租车 上 吧？",
+  "es": "Mujer: ¿Has visto mi reloj?\nHombre: No, ¿no te lo habrás dejado en el hotel?\nMujer: No, seguro que no me lo dejé en el hotel; recuerdo que al subir al taxi todavía lo llevaba puesto.\nHombre: Pues mira a ver si está en tu bolso, ¿no se te habrá perdido en el taxi?",
+  "pinyin": "nǚ: nǐ kàn jiàn wǒ de shǒu biǎo méi?\nnán: méi yǒu, shì bu shì wàng zài bīn guǎn le?\nnǚ: bú huì, kěn dìng méi wàng zài bīn guǎn, wǒ yìn xiàng lǐ shàng chē de shí hou hái dài zhe ne.\nnán: nà kàn kan zài bu zài nǐ bāo lǐ, bú huì diū zài chū zū chē shàng ba?"
+ },
  "4_6_7": {
   "zh": "男: 你 怎么 了?\n女: 我们 本来 说 明天 提前 放假 的, 刚才 突然 又 说 有 变化, 让 等 通知。\n男: 那 就 等一等 好 了, 也许 一会儿 就 有 好消息 了。\n女: 也 只好 这样 了。",
   "es": "Hombre: ¿Qué te ocurre?\nMujer: Originalmente nos habían dicho que mañana salíamos de vacaciones antes de tiempo, pero hace un momento de repente dijeron que hay cambios y que esperemos el aviso.\nHombre: Pues entonces espera un poco, a lo largo de un rato tal vez haya buenas noticias.\nMujer: No queda más remedio que hacer eso.",
@@ -802,17 +852,17 @@
  "4_7_1": {
   "zh": "六 到 八岁 的 儿童 普遍 好动, 坐不住, 所以 老师 在 教 这个 年龄段 的 孩子 时, 一定 要 想 办法 引起 他们 的 兴趣。 只有 让 他们 觉得 你 教 的 内容 有趣, 他们 才 会 愿意 跟 你 学, 才 肯 努力 地 学。",
   "es": "Los niños de seis a ocho años son generalmente muy activos y no pueden quedarse quietos, por lo que los profesores, al enseñar a niños de este rango de edad, deben encontrar maneras de despertar su interés. Solo cuando sientan que el contenido que enseñas es interesante, estarán dispuestos a aprender de ti y se esforzarán por estudiar.",
-  "pinyin": "liù dào bā suì de ér tóng pǔ biàn hào dòng, zuò bú zhù, suǒ yǐ lǎo shī zài jiào zhè ge nián líng duàn de hái zi shí, yí dìng yào xiǎng bàn fǎ yǐn qǐ tā men de xìng qù. zhǐ yǒu ràng tā men jué de nǐ jiào de nèi róng yǒu qù, tā men cái huì yuàn yì gēn nǐ xué, cái kěn nǔ lì de xué."
+  "pinyin": "liù dào bā suì de ér tóng pǔ biàn hào dòng, zuò bú zhù, suǒ yǐ lǎo shī zài jiāo zhè ge nián líng duàn de hái zi shí, yí dìng yào xiǎng bàn fǎ yǐn qǐ tā men de xìng qù. zhǐ yǒu ràng tā men jué de nǐ jiāo de nèi róng yǒu qù, tā men cái huì yuàn yì gēn nǐ xué, cái kěn nǔ lì de xué."
  },
  "4_7_2": {
   "zh": "我 最近 右眼 总是 跳, 医生 说 是因为 我 长时间 面对 电脑, 眼睛 太 累 了。 确实, 我 最近 准备 考试, 每天 都 要 在 电脑 前 坐 七八个 小时。 看来 我 应该 听 医生 的 话, 多 出去 走走, 让 眼睛 休息 休息。",
   "es": "Últimamente siempre me tiembla el ojo derecho, el médico dice que es porque paso mucho tiempo frente al ordenador y mis ojos están demasiado cansados. Efectivamente, he estado preparando un examen recientemente y paso de siete a ocho horas al día sentado frente al ordenador. Parece que debería hacer caso al médico, salir a caminar más y dejar descansar los ojos.",
   "pinyin": "wǒ zuì jìn yòu yǎn zǒng shì tiào, yī shēng shuō shì yīn wèi wǒ cháng shí jiān miàn duì diàn nǎo, yǎn jing tài lèi le. què shí, wǒ zuì jìn zhǔn bèi kǎo shì, měi tiān dōu yào zài diàn nǎo qián zuò qī bā gè xiǎo shí. kàn lái wǒ yīng gāi tīng yī shēng de huà, duō chū qù zǒu zou, ràng yǎn jing xiū xi xiū xi."
  },
- "4_7_4": {
-  "zh": "每个 人 都 需要 学会 怎么 花钱。 不管 收入 多 高, 乱花钱 都 会 让 你 变成 “月光族”。 会 花钱 的 人, 即使 收入 不 多, 也 能 让 自己 生活 得 舒服, 甚至 还 能 剩下 不少 钱。 一定 要 根据 实际 收入 情况 来 做 计划, 使 每 一 分 钱 都 花 在 该 花 的 地方 上。",
+ "4_7_3": {
+  "zh": "每个 人 都 需要 学习 怎么 花钱。 收入 再 多， 乱花钱 也 会 成为 月光族。 会 花钱 的 人， 即使 收入 不 多， 也 能 让 自己 生活 得 舒服， 甚至 还 能 剩下 不 少 钱。 一定 要 根据 实际 收入 情况 来 做 计划， 使 每 一 分 钱 都 花 在 该 花 的 地方 上。",
   "es": "Todo el mundo necesita aprender cómo gastar dinero. Por muchos ingresos que se tengan, gastar a lo loco te convertirá en un esclavo del sueldo mensual (alguien que gasta todo lo que gana). Las personas que saben gastar, aunque sus ingresos no sean altos, pueden vivir cómodamente e incluso ahorrar bastante dinero. Hay que hacer planes según la situación real de los ingresos, para que cada céntimo se gaste en el lugar donde corresponda.",
-  "pinyin": "měi gè rén dōu xū yào xué huì zěn me huā qián. bù guǎn shōu rù duō gāo, luàn huā qián dōu huì ràng nǐ biàn chéng \"yuè guāng zú\". huì huā qián de rén, jí shǐ shōu rù bù duō, yě néng ràng zì jǐ shēng huó de shū fu, shèn zhì hái néng shèng xià bù shǎo qián. yí dìng yào gēn jù shí jì shōu rù qíng kuàng lái zuò jì huà, shǐ měi yì fēn qián dōu huā zài gāi huā de dì fang shàng."
+  "pinyin": "měi gè rén dōu xū yào xué xí zěn me huā qián. shōu rù zài duō, luàn huā qián yě huì chéng wèi yuè guāng zú. huì huā qián de rén, jí shǐ shōu rù bù duō, yě néng ràng zì jǐ shēng huó de shū fu, shèn zhì hái néng shèng xià bù shǎo qián. yí dìng yào gēn jù shí jì shōu rù qíng kuàng lái zuò jì huà, shǐ měi yì fēn qián dōu huā zài gāi huā de dì fang shàng."
  },
  "4_8_1": {
   "zh": "王 小姐 在 商场 买 裙子。 她 从 试衣间 出来 后, 售货员 说: “您 穿 这条 裙子 有点儿 大。” 王 小姐 却 说: “那 太好了, 我 就 买 这条。” 售货员 感到 很 奇怪, 王 小姐 解释 说: “我 穿上 它, 朋友 见 了 肯定 会 说 我 减肥 成功 了。”",
@@ -823,6 +873,11 @@
   "zh": "我 刚 看 了 这个 照相机 的 使用 说明书, 介绍 得 非常 详细, 尤其 是 “常见 问题” 那 部分, 总结 了 许多 使用 过程 中 容易 出现 的 错误, 我 觉得 很 有用, 你 也 看看 吧。",
   "es": "Acabo de leer el manual de instrucciones de esta cámara, viene explicado de forma muy detallada, especialmente la sección de \"Preguntas frecuentes\", donde se resumen muchos errores comunes durante su uso; creo que es muy útil, tú también deberías echarle un vistazo.",
   "pinyin": "wǒ gāng kàn le zhè ge zhào xiàng jī de shǐ yòng shuō míng shū, jiè shào de fēi cháng xiáng xì, yóu qí shì \"cháng jiàn wèn tí\" nà bù fen, zǒng jié le xǔ duō shǐ yòng guò chéng zhōng róng yì chū xiàn de cuò wù, wǒ jué de hěn yǒu yòng, nǐ yě kàn kan ba."
+ },
+ "4_8_3": {
+  "zh": "小晴 是 我 最 好 的 朋友， 我俩 从小 一块儿 长大， 后来 还 在 同 一个 大学 读书。 她 今年 申请 了 出国 留学， 下个月 六号 就 要 走 了， 我 很 为 她 感到 高兴， 可是 一 想到 我们 就 要 分开 了， 心里 又 有 些 难过。",
+  "es": "Xiao Qing es mi mejor amiga; las dos crecimos juntas desde pequeñas y después además estudiamos en la misma universidad. Este año ha solicitado estudiar en el extranjero y se marcha el día seis del mes que viene; me alegro mucho por ella, pero en cuanto pienso que nos vamos a separar, me da un poco de tristeza.",
+  "pinyin": "xiǎo qíng shì wǒ zuì hǎo de péng yǒu, wǒ liǎ cóng xiǎo yí kuài ér zhǎng dà, hòu lái hái zài tóng yí gè dà xué dú shū. tā jīn nián shēn qǐng le chū guó liú xué, xià gè yuè liù hào jiù yào zǒu le, wǒ hěn wèi tā gǎn dào gāo xìng, kě shì yì xiǎng dào wǒ men jiù yào fēn kāi le, xīn lǐ yòu yǒu xiē nán guò."
  },
  "4_8_4": {
   "zh": "爷爷 非常 喜欢 京剧, 每晚 都 会 和 朋友 去 公园 唱 上 几段。 尽管 他们 并 不 专业, 但 唱 得 很 认真, 每次 都 会 吸引 很多 人 在 一旁 观看, 甚至 还有 人 想 跟着 他们 学。 最近, 他们 正 商量 教课 的 事情 呢。",
